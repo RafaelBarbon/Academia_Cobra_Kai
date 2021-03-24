@@ -15,6 +15,7 @@ public class aluno{
         this.telefone = telefone;
 		this.atraso_conta = 0;
 	}
+	/*
     public aluno(String nome, String CPF, String telefone){
 		this.nome = nome;
         this.CPF = CPF;
@@ -27,7 +28,7 @@ public class aluno{
         this.email = email;
 		this.atraso_conta = 0;
 	}
-
+*/
 	// Setters and getters
 	public String get_nome(){
 		return this.nome;
@@ -96,17 +97,17 @@ public class aluno{
 	}
 
 	public void exibe(){
-		System.out.println("Nome: %s", get_nome());
-		System.out.println("CPF: %s", get_CPF());
-		System.out.println("Email: %s", get_email());
-		System.out.println("Telefone: %s", get_telefone());
-		System.out.println("Número carteirinha: %s", get_carteirinha());
-		System.out.println("Valor da mensalidade: %.2f", get_mensalidade());
+		System.out.printf("Nome: %s", get_nome());
+		System.out.printf("CPF: %s", get_CPF());
+		System.out.printf("Email: %s", get_email());
+		System.out.printf("Telefone: %s", get_telefone());
+		System.out.printf("Número carteirinha: %s", get_carteirinha());
+		System.out.printf("Valor da mensalidade: %.2f", get_mensalidade());
 		if(get_mes_pago()){
 			System.out.println("Em dia");
 		}
 		else{
-			System.out.println("Atrasado %d meses", get_atraso_conta());
+			System.out.printf("Atrasado %d meses", get_atraso_conta());
 		}
 	}
 

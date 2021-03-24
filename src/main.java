@@ -10,100 +10,99 @@ public class main{
 		int menu_option = 0, codigo_carteirinha = 0;
 		boolean error = false, encontrou = false;
         //Listas de alunos
-		String procurar, nome, CPF, email, telefone;
+		String procurar, nome, CPF, email, telefone,aux;
 		aluno aluno_auxiliar;
         LinkedList <aluno> alunos = new LinkedList<aluno>();
 		do{
-			try{
-				error = false;
-				System.out.println("---MENU---\n");
-				System.out.println("0 - Sair.");
-				System.out.println("1 - Cadastro de Alunos.");
-				System.out.println("2 - Remoção de Alunos.");
-				System.out.println("3 - Consulta de Alunos.");
-				//System.out.println("4 - Sincronizar contas com o banco.");
-				System.out.println("-> ");
-				menu_option = input.nextInt();
-			}
-			catch(InputMismatchException InputMismatchException){
-				error = true;
-				System.out.println("Insira um número inteiro dentro do intervalo do menu para prosseguir. Pressione qualquer tecla para continuar.");
-				input.nextLine();
-			}
-    	}while(error || menu_option > 3 || menu_option < 0);
-		clear();
-		switch(menu_option){
-			case 1: // Cadastro de aluno
-                /*
-				coleta nome, CPF, email, telefone, RG, conta bancária
-				verifica se existe conflito de CPF
-				gera um número de carteirinha
-				*/
-				System.out.printf("Nome do Aluno ->");
-                nome = input.nextLine();
-                nome = input.nextLine();
-				nome = nome.toUppercase();
-                System.out.printf("CPF->");
-                CPF = input.nextLine();
-                CPF = input.nextLine();
-				System.out.printf("Email ->");
-                email = input.nextLine();
-                email = input.nextLine();
-                email = email.toLowercase();
-				System.out.printf("Telefone ->");
-				telefone = input.nextLine();
-                telefone = input.nextLine();
-                aluno_auxiliar = new aluno(nome,CPF,email,telefone);
-				codigo_carteirinha++;
-				aluno_auxiliar.set_carteirinha(codigo_carteirinha);
-				alunos.add(aluno_auxiliar);
-				break;
-			case 2: // Remoção de aluno
-				/*
-				coleta nº da carteirinha
-				confere se existe
-				remove
-				*/
-                exibir(alunos);
-				procurar = input.nextLine();
-				procurar = input.nextLine();
-				encontrou = false;
-                for(aluno al : alunos){
-					if(procurar.equals(al.get_carteirinha())){
-						alunos.remove(al);
-						System.out.println("Aluno removido com sucesso.");
-                        encontrou = true;
-                        break;
+			do{
+				try{
+					error = false;
+					System.out.println("---MENU---\n");
+					System.out.println("0 - Sair.");
+					System.out.println("1 - Cadastro de Alunos.");
+					System.out.println("2 - Remoção de Alunos.");
+					System.out.println("3 - Consulta de Alunos.");
+					//System.out.println("4 - Sincronizar contas com o banco.");
+					System.out.print("-> ");
+					menu_option = input.nextInt();
+				}
+				catch(InputMismatchException InputMismatchException){
+					error = true;
+					System.out.println("Insira um número inteiro dentro do intervalo do menu para prosseguir. Pressione qualquer tecla para continuar.");
+					input.nextLine();
+				}
+			}while(error || menu_option > 3 || menu_option < 0);
+			clear();
+			switch(menu_option){
+				case 1: // Cadastro de aluno
+					/*
+					coleta nome, CPF, email, telefone, RG, conta bancária
+					verifica se existe conflito de CPF
+					gera um número de carteirinha
+					*/
+					System.out.printf("Nome do Aluno ->");
+					nome = input.nextLine();
+					nome = input.nextLine();
+					nome = nome.toUpperCase();
+					System.out.printf("CPF->"); // 000 000 000 00
+					CPF = input.nextLine();
+					System.out.printf("Email ->"); // * @ *.com*
+					email = input.nextLine();
+					email = email.toLowerCase();
+					System.out.printf("Telefone ->"); // 00 &0000 0000
+					telefone = input.nextLine();
+					aluno_auxiliar = new aluno(nome,CPF,email,telefone);
+					codigo_carteirinha++;
+					aluno_auxiliar.set_carteirinha(Integer.toString(codigo_carteirinha));
+					alunos.add(aluno_auxiliar);
+					break;
+				case 2: // Remoção de aluno
+					/*
+					coleta nº da carteirinha
+					confere se existe
+					remove
+					*/
+					exibir(alunos);
+					procurar = input.nextLine();
+					procurar = input.nextLine();
+					encontrou = false;
+					for(aluno al : alunos){
+						if(procurar.equals(al.get_carteirinha())){
+							alunos.remove(al);
+							System.out.println("Aluno removido com sucesso.");
+							encontrou = true;
+							break;
+						}
 					}
-				}
-				if(!encontrou){
-					System.out.println("Aluno inexistente no sistema.");
-				}
-				break;
-			case 3: // Consulta de aluno
-				/*
-				coleta nº da carteirinha
-				confere se existe
-				coleta as infos & exibe
-				*/
-				exibir(alunos);
-				procurar = input.nextLine();
-				procurar = input.nextLine();
-				encontrou = false;
-                for(aluno al : alunos){
-					if(procurar.equals(al.get_carteirinha())){
-						al.exibe();
-                        encontrou = true;
-                        break;
+					if(!encontrou){
+						System.out.println("Aluno inexistente no sistema.");
 					}
-				}
-				if(!encontrou){
-					System.out.println("Aluno inexistente no sistema.");
-				}
-				break;
-			default: // Sair do sistema
-                System.out.println("Obrigado por utilizar o sistema.");
-		}
+					break;
+				case 3: // Consulta de aluno
+					/*
+					coleta nº da carteirinha
+					confere se existe
+					coleta as infos & exibe
+					*/
+					exibir(alunos);
+					procurar = input.nextLine();
+					procurar = input.nextLine();
+					encontrou = false;
+					for(aluno al : alunos){
+						if(procurar.equals(al.get_carteirinha())){
+							al.exibe();
+							encontrou = true;
+							break;
+						}
+					}
+					if(!encontrou){
+						System.out.println("Aluno inexistente no sistema.");
+					}
+					break;
+				default: // Sair do sistema
+					System.out.println("Obrigado por utilizar o sistema.");
+			}
+		}while(menu_option != 0);
 	}
 
 	// Método que limpa a tela do terminal
