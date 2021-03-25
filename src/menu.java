@@ -4,14 +4,14 @@
 
 import java.util.*;
 
-public class main{
+public class menu{
 	public static void main(String[] args){
 		Scanner input = new Scanner(System.in);
 		int menu_option = 0, codigo_carteirinha = 0;
 		boolean error = false, encontrou = false;
-        //Listas de alunos
-		String procurar, nome, CPF, email, telefone,aux;
+		String procurar, nome, CPF, email, telefone;
 		aluno aluno_auxiliar;
+		// Listas de alunos
         LinkedList <aluno> alunos = new LinkedList<aluno>();
 		do{
 			do{
@@ -44,12 +44,12 @@ public class main{
 					nome = input.nextLine();
 					nome = input.nextLine();
 					nome = nome.toUpperCase();
-					System.out.printf("CPF->"); // 000 000 000 00
+					System.out.printf("CPF->"); // 000 000 000 00 // FUNÇÃO QUE VERIFICA SE FOI INSERIDO 11 NºS
 					CPF = input.nextLine();
-					System.out.printf("Email ->"); // * @ *.com*
+					System.out.printf("Email ->"); // * @ *.com* // FUNÇÃO QUE VERIFICA O EMAIL
 					email = input.nextLine();
 					email = email.toLowerCase();
-					System.out.printf("Telefone ->"); // 00 &0000 0000
+					System.out.printf("Telefone ->"); // 00 &0000 0000 // DDD + (1) + 8 NºS
 					telefone = input.nextLine();
 					aluno_auxiliar = new aluno(nome,CPF,email,telefone);
 					codigo_carteirinha++;
@@ -100,7 +100,7 @@ public class main{
 					}
 					break;
 				default: // Sair do sistema
-					System.out.println("Obrigado por utilizar o sistema.");
+					System.out.println("Obrigado por utilizar o sistema desenvolvido por RAH - Desenvolvimento de Sistemas.");
 			}
 		}while(menu_option != 0);
 	}

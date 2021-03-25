@@ -7,6 +7,7 @@ public class aluno{
     private float mensalidade;
 	private boolean mes_pago;
     private int atraso_conta;
+	/////COLOCAR DATA DE NASCIMENTO
     //Construtores
 	public aluno(String nome, String CPF, String email, String telefone){
 		this.nome = nome;
@@ -86,16 +87,19 @@ public class aluno{
 		return this.mes_pago;
 	}
 
+	// Método que atribui atraso da conta de um cliente
 	public void atraso(int meses){
 		this.atraso_conta += meses;
 		this.mes_pago = false;
 	}
 
+	// Método que torna a situação financeira de um cliente como pago
 	public void pago(){
 		this.mes_pago = true;
 		this.atraso_conta = 0;
 	}
 
+	// Método que exibe as informações de um cliente
 	public void exibe(){
 		System.out.printf("Nome: %s", get_nome());
 		System.out.printf("CPF: %s", get_CPF());
@@ -111,6 +115,7 @@ public class aluno{
 		}
 	}
 
+	// Método que retorna nome e código de um cliente para escolha de consulta
 	public String toString(){
 		return String.format("%s - %s", get_nome(), get_carteirinha());
 	}
