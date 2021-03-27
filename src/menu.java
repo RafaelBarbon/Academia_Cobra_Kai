@@ -8,7 +8,7 @@ public class menu{
 	public static void main(String[] args){
 		Scanner input = new Scanner(System.in);
 		int menu_option = 0, codigo_carteirinha = 0;
-		boolean error = false, encontrou = false;
+		boolean error = false, encontrou = false, invalido = false;
 		String procurar, nome, CPF, email, telefone;
 		aluno aluno_auxiliar;
 		// Listas de alunos
@@ -44,8 +44,18 @@ public class menu{
 					nome = input.nextLine();
 					nome = input.nextLine();
 					nome = nome.toUpperCase();
-					System.out.printf("CPF->"); // 000 000 000 00 // FUNÇÃO QUE VERIFICA SE FOI INSERIDO 11 NºS
-					CPF = input.nextLine();
+					do{//Verifica conflito CPF
+						invalido = false;
+						System.out.printf("CPF->"); // 000 000 000 00
+						CPF = input.nextLine();
+						for(aluno al : alunos){
+							if(CPF.equals(al.get_CPF()) || CPF.matches("[0-9]+")){
+								invalido = true;
+								break;
+							}
+						}
+					}while(invalido);
+					CPF = formataCPF(CPF);
 					System.out.printf("Email ->"); // * @ *.com* // FUNÇÃO QUE VERIFICA O EMAIL
 					email = input.nextLine();
 					email = email.toLowerCase();
@@ -121,6 +131,26 @@ public class menu{
 		}
 	}
 
+	// Formata o CPF do aluno (00000000000 -> 000.000.000-00)
+	public static String formataCPF(String CPF){
+		char [] CPFC = CPF.toCharArray(), CPFF = {'0','0','0','.','0','0','0','.','0','0','0','-','0','0'};
+		for(int i = 0,j = 0; i < 12; i++){
+			if(i == 3 || i == 6){
+				j++;
+				CPFF[j++] = CPFC[i];
+			}
+			else if(i == 9){
+				j++;
+				CPFF[j++] = CPFC[i];
+			}
+			else{
+				CPFF[j++] = CPFC[i];
+			}
+		}
+		return CPFF.toString();
+	}
+
+	// Método que lista os nomes e carteirinhas para a consulta
 	public static <T> void exibir(LinkedList <T> lista){
 		for(T aux : lista){
 			System.out.printf("\t%s", aux);
