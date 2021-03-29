@@ -135,17 +135,10 @@ public class menu{
 	public static String formataCPF(String CPF){
 		char [] CPFC = CPF.toCharArray(), CPFF = {'0','0','0','.','0','0','0','.','0','0','0','-','0','0'};
 		for(int i = 0,j = 0; i < 12; i++){
-			if(i == 3 || i == 6){
+			if(i == 3 || i == 6 || i == 9){
 				j++;
-				CPFF[j++] = CPFC[i];
 			}
-			else if(i == 9){
-				j++;
 				CPFF[j++] = CPFC[i];
-			}
-			else{
-				CPFF[j++] = CPFC[i];
-			}
 		}
 		return CPFF.toString();
 	}
