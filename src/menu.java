@@ -44,27 +44,51 @@ public class menu{
 					nome = input.nextLine();
 					nome = input.nextLine();
 					nome = nome.toUpperCase();
+					invalido = true;
 					do{//Verifica conflito CPF
-						invalido = false;
 						System.out.printf("CPF->"); // 000 000 000 00
 						CPF = input.nextLine();
+						if(CPF.matches("[0-9]+") && CPF.length() == 11){
+							invalido = false;
+						}
 						for(aluno al : alunos){
-							if(CPF.equals(al.get_CPF()) || CPF.matches("[0-9]+")){
+							if(CPF.equals(al.get_CPF())){
 								invalido = true;
 								break;
 							}
 						}
+						if(invalido){
+							System.out.println("CPF inválido, tente novamente digitando apenas números.");
+						}
 					}while(invalido);
-					CPF = formataCPF(CPF);
-					System.out.printf("Email ->"); // * @ *.com* // FUNÇÃO QUE VERIFICA O EMAIL
-					email = input.nextLine();
-					email = email.toLowerCase();
-					System.out.printf("Telefone ->"); // 00 &0000 0000 // DDD + (1) + 8 NºS
-					telefone = input.nextLine();
+					//1CPF = formataCPF(CPF);
+					invalido = true;
+					do{
+						System.out.printf("Email ->"); // * @ *.com* // FUNÇÃO QUE VERIFICA O EMAIL
+						email = input.nextLine();
+						email = email.toLowerCase();
+						if(confirmaEmail(email)){
+							invalido = false;
+						}
+						else{
+							System.out.println("Email inválido, tente novamente.");
+						}
+					}while(invalido);
+					invalido = true;
+					do{
+						System.out.printf("Telefone ->"); // 00 &0000 0000 // DDD + (1) + 8 NºS
+						telefone = input.nextLine();
+						if((telefone.length() == 10 || telefone.length() == 11) && telefone.matches("[0-9]+")){
+							invalido = false;
+						}
+					}while(invalido);
 					aluno_auxiliar = new aluno(nome,CPF,email,telefone);
 					codigo_carteirinha++;
 					aluno_auxiliar.set_carteirinha(Integer.toString(codigo_carteirinha));
 					alunos.add(aluno_auxiliar);
+					System.out.println("Aluno cadastrado com sucesso. Pressione ENTER para continuar.");
+					input.nextLine();
+					clear();
 					break;
 				case 2: // Remoção de aluno
 					/*
@@ -73,20 +97,23 @@ public class menu{
 					remove
 					*/
 					exibir(alunos);
+					System.out.print("\n->");
 					procurar = input.nextLine();
 					procurar = input.nextLine();
 					encontrou = false;
 					for(aluno al : alunos){
 						if(procurar.equals(al.get_carteirinha())){
 							alunos.remove(al);
-							System.out.println("Aluno removido com sucesso.");
+							System.out.println("Aluno removido com sucesso. Pressione ENTER para continuar");
 							encontrou = true;
 							break;
 						}
 					}
 					if(!encontrou){
-						System.out.println("Aluno inexistente no sistema.");
+						System.out.println("Aluno inexistente no sistema. Pressione ENTER para continuar");
 					}
+					input.nextLine();
+					clear();
 					break;
 				case 3: // Consulta de aluno
 					/*
@@ -95,6 +122,7 @@ public class menu{
 					coleta as infos & exibe
 					*/
 					exibir(alunos);
+					System.out.print("\n->");
 					procurar = input.nextLine();
 					procurar = input.nextLine();
 					encontrou = false;
@@ -108,6 +136,9 @@ public class menu{
 					if(!encontrou){
 						System.out.println("Aluno inexistente no sistema.");
 					}
+					System.out.println("Pressione ENTER para continuar.");
+					input.nextLine();
+					clear();
 					break;
 				default: // Sair do sistema
 					System.out.println("Obrigado por utilizar o sistema desenvolvido por RAH - Desenvolvimento de Sistemas.");
@@ -133,7 +164,7 @@ public class menu{
 
 	// Formata o CPF do aluno (00000000000 -> 000.000.000-00)
 	public static String formataCPF(String CPF){
-		char [] CPFC = CPF.toCharArray(), CPFF = {'0','0','0','.','0','0','0','.','0','0','0','-','0','0'};
+		char [] CPFC = CPF.toCharArray(), CPFF = {'0','0','0','.','0','0','0','.','0','0','0','-','0','0','\0'};
 		for(int i = 0,j = 0; i < 12; i++){
 			if(i == 3 || i == 6 || i == 9){
 				j++;
@@ -141,6 +172,23 @@ public class menu{
 				CPFF[j++] = CPFC[i];
 		}
 		return CPFF.toString();
+	}
+
+	public static boolean confirmaEmail(String email){
+		char [] confere = email.toCharArray();
+
+		if(confere[0] < 97 && confere[0] > 122)
+			return false;
+		for(int i = 1; i < email.length(); i++){
+			if(confere[i] == '@'){
+				for(; i+3 < email.length(); i++){
+					if(confere[i] == '.' && confere[i+1] == 'c' && confere[i+2] == 'o' && confere[i+3] == 'm'){
+						return true;
+					}
+				}
+			}
+		}
+		return false;
 	}
 
 	// Método que lista os nomes e carteirinhas para a consulta

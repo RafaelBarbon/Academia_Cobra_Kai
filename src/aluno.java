@@ -101,23 +101,24 @@ public class aluno{
 
 	// Método que exibe as informações de um cliente
 	public void exibe(){
-		System.out.printf("Nome: %s", get_nome());
-		System.out.printf("CPF: %s", get_CPF());
-		System.out.printf("Email: %s", get_email());
-		System.out.printf("Telefone: %s", get_telefone());
-		System.out.printf("Número carteirinha: %s", get_carteirinha());
-		System.out.printf("Valor da mensalidade: %.2f", get_mensalidade());
+		System.out.printf("Nome: %s\n", get_nome());
+		System.out.printf("CPF: %s\n", get_CPF());
+		System.out.printf("Email: %s\n", get_email());
+		System.out.printf("Telefone: %s\n", get_telefone());
+		System.out.printf("Número carteirinha: %s\n", get_carteirinha());
+		System.out.printf("Valor da mensalidade: %.2f\n", get_mensalidade());
+		System.out.printf("Mensalidade: ");
 		if(get_mes_pago()){
 			System.out.println("Em dia");
 		}
 		else{
-			System.out.printf("Atrasado %d meses", get_atraso_conta());
+			System.out.printf("Atrasado %d meses\n", get_atraso_conta());
 		}
 	}
 
 	// Método que retorna nome e código de um cliente para escolha de consulta
 	public String toString(){
-		return String.format("%s - %s", get_nome(), get_carteirinha());
+		return String.format("%s - %s\t", get_nome(), get_carteirinha());
 	}
 }
 
