@@ -6,15 +6,20 @@ public class aluno{
 	private String nome, CPF, email, telefone, carteirinha;
     private float mensalidade;
 	private boolean mes_pago;
-    private int atraso_conta;
+    private int atraso_conta, forma_pagamento;
 	/////COLOCAR DATA DE NASCIMENTO
+
     //Construtores
-	public aluno(String nome, String CPF, String email, String telefone){
+	public aluno(String nome, String CPF, String email, String telefone, String carteirinha, int forma_pagamento){
 		this.nome = nome;
         this.CPF = CPF;
         this.email = email;
         this.telefone = telefone;
 		this.atraso_conta = 0;
+		this.carteirinha = carteirinha;
+		this.forma_pagamento = forma_pagamento;
+		this.mes_pago = true;
+		this.mensalidade = 0;
 	}
 	/*
     public aluno(String nome, String CPF, String telefone){
@@ -83,6 +88,14 @@ public class aluno{
 		return this.atraso_conta;
 	}
 
+	public void set_forma_pagamento(int forma_pagamento){
+		this.forma_pagamento = forma_pagamento;
+	}
+
+	public int get_forma_pagamento(){
+		return this.forma_pagamento;
+	}
+
 	public boolean get_mes_pago(){
 		return this.mes_pago;
 	}
@@ -105,8 +118,10 @@ public class aluno{
 		System.out.printf("CPF: %s\n", get_CPF());
 		System.out.printf("Email: %s\n", get_email());
 		System.out.printf("Telefone: %s\n", get_telefone());
-		System.out.printf("Número carteirinha: %s\n", get_carteirinha());
+		System.out.printf("Número carteirinha: %.8s\n", get_carteirinha());
+		System.out.printf("Data de nascimento: \n"); //////////////// data
 		System.out.printf("Valor da mensalidade: %.2f\n", get_mensalidade());
+		System.out.printf("Forma de Pagamento:%s\n", get_forma_pagamento() == 1 ? "Boleto bancário" : "Débito automático");
 		System.out.printf("Mensalidade: ");
 		if(get_mes_pago()){
 			System.out.println("Em dia");

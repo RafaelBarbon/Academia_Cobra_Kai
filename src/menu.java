@@ -7,7 +7,7 @@ import java.util.*;
 public class menu{
 	public static void main(String[] args){
 		Scanner input = new Scanner(System.in);
-		int menu_option = 0, codigo_carteirinha = 0;
+		int menu_option = 0, codigo_carteirinha = 0, forma_pag = 0;
 		boolean error = false, encontrou = false, invalido = false;
 		String procurar, nome, CPF, email, telefone;
 		aluno aluno_auxiliar;
@@ -19,10 +19,15 @@ public class menu{
 					error = false;
 					System.out.println("---MENU---\n");
 					System.out.println("0 - Sair.");
-					System.out.println("1 - Cadastro de Alunos.");
-					System.out.println("2 - Remoção de Alunos.");
-					System.out.println("3 - Consulta de Alunos.");
+					System.out.println("1 - Cadastro de Alunos."); // cadastrar professores e aulas (submenu de cadastro)
+					System.out.println("2 - Remoção de Alunos."); // remover professores e aulas (submenu de remoção)
+					System.out.println("3 - Consulta de Alunos."); // consultar professores e aulas (submenu de consulta)
 					//System.out.println("4 - Sincronizar contas com o banco.");
+					//System.out.println("5 - Vincular professor com sala");
+					//System.out.println("6 - Vincular aluno com sala");
+					//System.out.println("7 - Desvincular professor com sala");
+					//System.out.println("8 - Desvincular aluno com sala");
+					//System.out.println("9 - Entrada de aluno(s)");
 					System.out.print("-> ");
 					menu_option = input.nextInt();
 				}
@@ -61,13 +66,19 @@ public class menu{
 							System.out.println("CPF inválido, tente novamente digitando apenas números.");
 						}
 					}while(invalido);
-					//1CPF = formataCPF(CPF);
 					invalido = true;
 					do{
 						System.out.printf("Email ->"); // * @ *.com* // FUNÇÃO QUE VERIFICA O EMAIL
 						email = input.nextLine();
 						email = email.toLowerCase();
-						if(confirmaEmail(email)){
+						if(email.matches("^(?=.{1,64}@)[a-z0-9_-]+(\\.[a-z0-9_-]+)*@"/*nome do email*/+"[^-][a-z0-9-]+(\\.[a-z0-9-]+)*(\\.[a-z]{2,})$")/*domínio*/){
+							/*
+							^(?=.{1,64}@) -> define o espaço máximo do email (entre 1 e 64 caracteres antes do '@')
+							[a-z0-9_-]+ -> indica o primeiro caractere do email, sendo que não se pode iniciar com '.', '+' representa mais de um
+							(\\.[a-z0-9_-]+)*@ -> // indica que é seguido pelo intervalo de caracteres definidos, incluindo o '.', "*@" indica que deve conter caracteres antes do '@'
+							[^-] -> indica que não se pode começar com '-'
+							(\\.[a-z0-9-]+)*(\\.[a-z]{2,})$ -> deve conter o domínio separado por ponto e, após o ponto, no mínimo 2 caracteres
+							*/
 							invalido = false;
 						}
 						else{
@@ -78,13 +89,24 @@ public class menu{
 					do{
 						System.out.printf("Telefone ->"); // 00 &0000 0000 // DDD + (1) + 8 NºS
 						telefone = input.nextLine();
-						if((telefone.length() == 10 || telefone.length() == 11) && telefone.matches("[0-9]+")){
+						if((telefone.length() == 10 || telefone.length() == 11) && telefone.matches("[0-9]+")){ // Verifica se existe somente números e verifica o tamanho (caso de celular / telefone fixo)
 							invalido = false;
 						}
 					}while(invalido);
-					aluno_auxiliar = new aluno(nome,CPF,email,telefone);
+					do{//Inserção da forma de pagamento.
+						try{
+							error = false;
+							System.out.printf("Forma de pagamento (1-Boleto; 2-Débito Automático) ->");
+							forma_pag = input.nextInt();
+						}
+						catch(InputMismatchException InputMismatchException){
+							error = true;
+							System.out.println("Insira um número inteiro dentro do intervalo do menu para prosseguir. Pressione qualquer tecla para continuar.");
+							input.nextLine();
+						}
+					}while(error || forma_pag > 2 || forma_pag < 1);
 					codigo_carteirinha++;
-					aluno_auxiliar.set_carteirinha(Integer.toString(codigo_carteirinha));
+					aluno_auxiliar = new aluno(nome,formataCPF(CPF),email,telefone,Integer.toString(codigo_carteirinha),forma_pag);
 					alunos.add(aluno_auxiliar);
 					System.out.println("Aluno cadastrado com sucesso. Pressione ENTER para continuar.");
 					input.nextLine();
@@ -110,7 +132,7 @@ public class menu{
 						}
 					}
 					if(!encontrou){
-						System.out.println("Aluno inexistente no sistema. Pressione ENTER para continuar");
+						System.out.println("Aluno(s) inexistente(s) no sistema. Pressione ENTER para continuar");
 					}
 					input.nextLine();
 					clear();
@@ -134,7 +156,7 @@ public class menu{
 						}
 					}
 					if(!encontrou){
-						System.out.println("Aluno inexistente no sistema.");
+						System.out.println("Aluno(s) inexistente(s) no sistema.");
 					}
 					System.out.println("Pressione ENTER para continuar.");
 					input.nextLine();
@@ -164,31 +186,8 @@ public class menu{
 
 	// Formata o CPF do aluno (00000000000 -> 000.000.000-00)
 	public static String formataCPF(String CPF){
-		char [] CPFC = CPF.toCharArray(), CPFF = {'0','0','0','.','0','0','0','.','0','0','0','-','0','0','\0'};
-		for(int i = 0,j = 0; i < 12; i++){
-			if(i == 3 || i == 6 || i == 9){
-				j++;
-			}
-				CPFF[j++] = CPFC[i];
-		}
-		return CPFF.toString();
-	}
-
-	public static boolean confirmaEmail(String email){
-		char [] confere = email.toCharArray();
-
-		if(confere[0] < 97 && confere[0] > 122)
-			return false;
-		for(int i = 1; i < email.length(); i++){
-			if(confere[i] == '@'){
-				for(; i+3 < email.length(); i++){
-					if(confere[i] == '.' && confere[i+1] == 'c' && confere[i+2] == 'o' && confere[i+3] == 'm'){
-						return true;
-					}
-				}
-			}
-		}
-		return false;
+		String newCPF = CPF.substring(0,3)+'.'+CPF.substring(3,6)+'.'+CPF.substring(6,9)+'-'+CPF.substring(9);
+		return newCPF;
 	}
 
 	// Método que lista os nomes e carteirinhas para a consulta
