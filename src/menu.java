@@ -7,10 +7,12 @@ import java.util.*;
 public class menu{
 	public static void main(String[] args){
 		Scanner input = new Scanner(System.in);
-		int menu_option = 0, codigo_carteirinha = 0, forma_pag = 0;
+
+		int menu_option = 0, contador_carteirinha = 0, forma_pag = 0, dia = 0, mes = 0, ano = 0;
 		boolean error = false, encontrou = false, invalido = false;
-		String procurar, nome, CPF, email, telefone;
+		String procurar, nome, CPF, email, telefone,carteirinha;
 		aluno aluno_auxiliar;
+		Data data = null;
 		// Listas de alunos
         LinkedList <aluno> alunos = new LinkedList<aluno>();
 		do{
@@ -19,15 +21,16 @@ public class menu{
 					error = false;
 					System.out.println("---MENU---\n");
 					System.out.println("0 - Sair.");
-					System.out.println("1 - Cadastro de Alunos."); // cadastrar professores e aulas (submenu de cadastro)
-					System.out.println("2 - Remoção de Alunos."); // remover professores e aulas (submenu de remoção)
-					System.out.println("3 - Consulta de Alunos."); // consultar professores e aulas (submenu de consulta)
+					System.out.println("1 - Cadastro de Alunos."); // Cadastrar professores e aulas (submenu de cadastro)
+					System.out.println("2 - Remoção de Alunos."); // Remover professores e aulas (submenu de remoção)
+					System.out.println("3 - Consulta de Alunos."); // Consultar professores e aulas (submenu de consulta)
+					System.out.println("4 - Entrada de aluno(s)"); // "Catraca"
 					//System.out.println("4 - Sincronizar contas com o banco.");
 					//System.out.println("5 - Vincular professor com sala");
 					//System.out.println("6 - Vincular aluno com sala");
 					//System.out.println("7 - Desvincular professor com sala");
 					//System.out.println("8 - Desvincular aluno com sala");
-					//System.out.println("9 - Entrada de aluno(s)");
+					//System.out.println("9 - Atualizar informações aluno");
 					System.out.print("-> ");
 					menu_option = input.nextInt();
 				}
@@ -36,7 +39,7 @@ public class menu{
 					System.out.println("Insira um número inteiro dentro do intervalo do menu para prosseguir. Pressione qualquer tecla para continuar.");
 					input.nextLine();
 				}
-			}while(error || menu_option > 3 || menu_option < 0);
+			}while(error || menu_option > 4 || menu_option < 0);
 			clear();
 			switch(menu_option){
 				case 1: // Cadastro de aluno
@@ -92,8 +95,79 @@ public class menu{
 						if((telefone.length() == 10 || telefone.length() == 11) && telefone.matches("[0-9]+")){ // Verifica se existe somente números e verifica o tamanho (caso de celular / telefone fixo)
 							invalido = false;
 						}
+						else{
+							System.out.println("Telefone inválido, tente novamente.");
+						}
 					}while(invalido);
+					invalido = true;
+					do{
+						System.out.println("Data de nascimento.");
+						error = true;
+						do{
+							try{
+								error = false;
+								System.out.printf("Dia ->");
+								dia = input.nextInt();
+							}
+							catch(InputMismatchException InputMismatchException){
+								error = true;
+								System.out.println("Insira um número inteiro para prosseguir. Pressione qualquer tecla para continuar.");
+								input.nextLine();
+								input.nextLine();
+								clear();
+							}
+						}while(error);
+						error = true;
+						do{
+							try{
+								error = false;
+								System.out.printf("Mes ->");
+								mes = input.nextInt();
+							}
+							catch(InputMismatchException InputMismatchException){
+								error = true;
+								System.out.println("Insira um número inteiro para prosseguir. Pressione qualquer tecla para continuar.");
+								input.nextLine();
+								input.nextLine();
+								clear();
+							}
+						}while(error);
+						error = true;
+						do{
+							try{
+								error = false;
+								System.out.printf("Ano ->");
+								ano = input.nextInt();
+							}
+							catch(InputMismatchException InputMismatchException){
+								error = true;
+								System.out.println("Insira um número inteiro para prosseguir. Pressione qualquer tecla para continuar.");
+								input.nextLine();
+								input.nextLine();
+								clear();
+							}
+						}while(error);
+						try{
+							invalido = false;
+							data = new Data(dia, mes, ano);
+						}
+						catch(IllegalArgumentException VariableDeclaratorId){
+							invalido = true;
+							System.out.println(VariableDeclaratorId);
+							System.out.println("Pressione qualquer tecla para continuar.");
+							input.nextLine();
+							input.nextLine();
+							clear();
+						}
+					}while(invalido);
+					forma_pag = 1;
 					do{//Inserção da forma de pagamento.
+						if(forma_pag > 2 || forma_pag < 1){
+							System.out.println("Insira um número inteiro dentro do intervalo para prosseguir. Pressione qualquer tecla para continuar.");
+							input.nextLine();
+							input.nextLine();
+							clear();
+						}
 						try{
 							error = false;
 							System.out.printf("Forma de pagamento (1-Boleto; 2-Débito Automático) ->");
@@ -101,12 +175,14 @@ public class menu{
 						}
 						catch(InputMismatchException InputMismatchException){
 							error = true;
-							System.out.println("Insira um número inteiro dentro do intervalo do menu para prosseguir. Pressione qualquer tecla para continuar.");
+							System.out.println("Insira um número inteiro para prosseguir. Pressione qualquer tecla para continuar.");
 							input.nextLine();
+							input.nextLine();
+							clear();
 						}
 					}while(error || forma_pag > 2 || forma_pag < 1);
-					codigo_carteirinha++;
-					aluno_auxiliar = new aluno(nome,formataCPF(CPF),email,telefone,Integer.toString(codigo_carteirinha),forma_pag);
+					contador_carteirinha++;
+					aluno_auxiliar = new aluno(nome,formataCPF(CPF),email,telefone,Integer.toString(contador_carteirinha),forma_pag,data);
 					alunos.add(aluno_auxiliar);
 					System.out.println("Aluno cadastrado com sucesso. Pressione ENTER para continuar.");
 					input.nextLine();
@@ -126,15 +202,19 @@ public class menu{
 					for(aluno al : alunos){
 						if(procurar.equals(al.get_carteirinha())){
 							alunos.remove(al);
-							System.out.println("Aluno removido com sucesso. Pressione ENTER para continuar");
+							System.out.println("Aluno removido com sucesso");
 							encontrou = true;
 							break;
 						}
 					}
 					if(!encontrou){
-						System.out.println("Aluno(s) inexistente(s) no sistema. Pressione ENTER para continuar");
+						System.out.println("Aluno(s) inexistente(s) no sistema");
 					}
-					input.nextLine();
+					try{
+						Thread.sleep(2000);
+					}
+					catch(InterruptedException e){
+					}
 					clear();
 					break;
 				case 3: // Consulta de aluno
@@ -162,8 +242,42 @@ public class menu{
 					input.nextLine();
 					clear();
 					break;
+				case 4:
+					System.out.print("Insira a carteirinha do aluno que deseja entrar\n->");
+					input.nextLine();
+					carteirinha = input.nextLine();
+					encontrou = false;
+					for(aluno al : alunos){
+						if(al.get_carteirinha().equals(carteirinha)){
+							encontrou = true;
+							if(al.get_mes_pago()){
+								System.out.printf("Seja bem vindo %s.", al.get_nome());
+								break;
+							}
+							else{
+								System.out.println("Aluno inadimplente.");
+								break;
+							}
+						}
+					}
+					if(!encontrou){
+						System.out.println("Aluno inexistente no sistema.");
+					}
+					try{
+						Thread.sleep(2000);
+					}
+					catch(InterruptedException e){
+					}
+					clear();
+					break;
 				default: // Sair do sistema
 					System.out.println("Obrigado por utilizar o sistema desenvolvido por RAH - Desenvolvimento de Sistemas.");
+					try{
+						Thread.sleep(5000);
+					}
+					catch(InterruptedException e){
+					}
+					clear();
 			}
 		}while(menu_option != 0);
 	}
@@ -186,7 +300,7 @@ public class menu{
 
 	// Formata o CPF do aluno (00000000000 -> 000.000.000-00)
 	public static String formataCPF(String CPF){
-		String newCPF = CPF.substring(0,3)+'.'+CPF.substring(3,6)+'.'+CPF.substring(6,9)+'-'+CPF.substring(9);
+		String newCPF = CPF.substring(0,3) + '.' + CPF.substring(3,6) + '.' + CPF.substring(6,9) + '-' + CPF.substring(9);
 		return newCPF;
 	}
 
