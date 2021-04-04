@@ -2,25 +2,23 @@
 // Henrique Sartori Siqueira	19240472
 // Rafael Silva Barbon			19243633
 
-public class aluno{
-	private String nome, CPF, email, telefone, carteirinha;
+public class aluno extends Info{
     private float mensalidade; // DEFINIR MENSALIDADE DO ALUNO AO CADASTRAR EM UMA AULA
 	private boolean mes_pago;
-    private int atraso_conta, forma_pagamento;
-	private Data nascimento;
+    private int atraso_conta, forma_pagamento, faixa;
 
     //Construtores
-	public aluno(String nome, String CPF, String email, String telefone, String carteirinha, int forma_pagamento, Data nascimento){
-		this.nome = nome;
-        this.CPF = CPF;
-        this.email = email;
-        this.telefone = telefone;
+	public aluno(String nome, String CPF, String email, String telefone, String codigo, int forma_pagamento, Data nascimento){
+		super.nome = nome;
+        super.CPF = CPF;
+        super.email = email;
+        super.telefone = telefone;
 		this.atraso_conta = 0;
-		this.carteirinha = carteirinha;
+		super.codigo = codigo;
 		this.forma_pagamento = forma_pagamento;
 		this.mes_pago = true;
 		this.mensalidade = 0;
-		this.nascimento = nascimento;
+		super.nascimento = nascimento;
 	}
 	/*
     public aluno(String nome, String CPF, String telefone){
@@ -37,44 +35,25 @@ public class aluno{
 	}
 */
 	// Setters and getters
-	public String get_nome(){
-		return this.nome;
-	}
 
+	@Override
 	public void set_nome(String nome){
 		this.nome = nome;
 	}
 
-	public String get_CPF(){
-		return this.CPF;
-	}
-
+	@Override
 	public void set_CPF(String CPF){
 		this.CPF = CPF;
 	}
 
-	public String get_email(){
-		return this.email;
-	}
-
+	@Override
 	public void set_email(String email){
 		this.email = email;
 	}
 
-	public String get_telefone(){
-		return this.telefone;
-	}
-
+	@Override
     public void set_telefone(String telefone){
 		this.telefone = telefone;
-	}
-
-    public String get_carteirinha(){
-		return this.carteirinha;
-	}
-
-	public void set_carteirinha(String carteirinha){
-		this.carteirinha = carteirinha;
 	}
 
 	public float get_mensalidade(){
@@ -85,6 +64,7 @@ public class aluno{
 		this.mensalidade = mensalidade;
 	}
 
+	@Override
 	public void set_nascimento(int Dia, int Mes, int Ano){
 		this.nascimento = new Data(Dia, Mes, Ano);
 	}
@@ -105,8 +85,12 @@ public class aluno{
 		return this.mes_pago;
 	}
 
-	public Data get_nascimento(){
-		return this.nascimento;
+	public void set_faixa(int faixa){
+		this.faixa = faixa;
+	}
+
+	public int get_faixa(){
+		return this.faixa;
 	}
 
 	// Método que atribui atraso da conta de um cliente
@@ -121,14 +105,52 @@ public class aluno{
 		this.atraso_conta = 0;
 	}
 
+
 	// Método que exibe as informações de um cliente
+	@Override
 	public void exibe(){
 		System.out.printf("Nome: %s\n", get_nome());
 		System.out.printf("CPF: %s\n", get_CPF());
-		System.out.printf("Data de nascimento: "+ get_nascimento()+"\n");
+		System.out.printf("Data de nascimento: " + get_nascimento()+"\n");
 		System.out.printf("Email: %s\n", get_email());
 		System.out.printf("Telefone: %s\n", get_telefone());
-		System.out.printf("Número carteirinha: %.8s\n", get_carteirinha());
+		System.out.printf("Número codigo: %.08s\n", get_codigo());
+		System.out.print("Faixa: ");
+		switch(get_faixa()){
+			case 1:
+			System.out.println("Amarela");
+				break;
+			case 2:
+			System.out.println("Dourada");
+				break;
+			case 3:
+			System.out.println("Laranja");
+				break;
+			case 4:
+			System.out.println("Jade");
+				break;
+			case 5:
+			System.out.println("Verde");
+				break;
+			case 6:
+			System.out.println("Roxa");
+				break;
+			case 7:
+			System.out.println("Azul");
+				break;
+			case 8:
+			System.out.println("Vermelha");
+				break;
+			case 9:
+			System.out.println("Marrom Clara");
+				break;
+			case 10:
+			System.out.println("Marrom");
+				break;
+			case 11:
+			System.out.println("Preta");
+				break;
+		}
 		System.out.printf("Valor da mensalidade: %.2f\n", get_mensalidade());
 		System.out.printf("Forma de Pagamento:%s\n", get_forma_pagamento() == 1 ? "Boleto bancário" : "Débito automático");
 		System.out.printf("Mensalidade: ");
@@ -142,7 +164,7 @@ public class aluno{
 
 	// Método que retorna nome e código de um cliente para escolha de consulta
 	public String toString(){
-		return String.format("%s - %s\t", get_nome(), get_carteirinha());
+		return String.format("%s - %s\t", get_nome(), get_codigo());
 	}
 }
 
