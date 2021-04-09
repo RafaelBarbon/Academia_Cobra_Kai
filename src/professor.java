@@ -3,6 +3,7 @@
 // Rafael Silva Barbon			19243633
 
 public class professor extends Info{
+	private int aulasMes;
     public professor(String nome, String CPF, String email, String telefone, String codigo, Data nascimento){
         this.nome = nome;
         this.CPF = CPF;
@@ -10,7 +11,12 @@ public class professor extends Info{
         this.telefone = telefone;
         this.codigo = codigo;
         this.nascimento = nascimento;
+		this.aulasMes = 0;
     }
+
+	public int get_aulasMes(){
+		return this.aulasMes;
+	}
 
     @Override
 	public void set_nome(String nome){
@@ -27,15 +33,24 @@ public class professor extends Info{
 		this.email = email;
 	}
 
-
     @Override
     public void set_telefone(String telefone){
 		this.telefone = telefone;
 	}
 
     @Override
-	public void set_nascimento(int Dia, int Mes, int Ano){
-		this.nascimento = new Data(Dia, Mes, Ano);
+	public void set_nascimento(Data data){
+		this.nascimento = data;
+	}
+
+	// Método que inicia o mês, zerando o número de aulas dos professores
+	public void IniciaMes(){
+		this.aulasMes = 0;
+	}
+
+	// Método que incrementa o número de aulas do professor
+	public void IncrementaAula(){
+		this.aulasMes++;
 	}
 
 	// Método que exibe as informações do professor

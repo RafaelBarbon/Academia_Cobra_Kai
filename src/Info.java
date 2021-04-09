@@ -38,7 +38,7 @@ abstract class Info {
 		return this.nascimento;
 	}
 
-	abstract void set_nascimento(int Dia, int Mes, int Ano);
+	abstract void set_nascimento(Data data);
 
 	abstract void exibe();
 }

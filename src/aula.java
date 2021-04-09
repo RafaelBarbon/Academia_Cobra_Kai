@@ -4,18 +4,18 @@
 
 public class aula{
 	private String codigo;
-	private int nivel, periodo;
+	private int faixa, periodo;
 	private boolean armas;
 
-    public aula(int nivel, boolean armas, int periodo, String codigo){
-        this.nivel = nivel;
+    public aula(int faixa, boolean armas, int periodo, String codigo){
+        this.faixa = faixa;
         this.armas = armas;
 		this.periodo = periodo;
 		this.codigo = codigo;
     }
 
-    public int get_nivel(){
-        return this.nivel;
+    public int get_faixa(){
+        return this.faixa;
     }
 
     public boolean get_arma(){
@@ -34,8 +34,8 @@ public class aula{
         this.periodo = periodo;
     }
 
-    public void set_nivel(int nivel){
-        this.nivel = nivel;
+    public void set_faixa(int faixa){
+        this.faixa = faixa;
     }
 
     public void set_arma(boolean arma){
@@ -44,7 +44,42 @@ public class aula{
 
 	public void exibe(){
 		System.out.printf("Código: %s\n", get_codigo());
-		System.out.printf("Nível: %s\n", get_nivel() == 1 ? "iniciante" : get_nivel() == 2 ? "intermediário" : "avançado");
+		System.out.printf("Faixa: ");
+		switch(get_faixa()){
+			case 0:
+			System.out.println("Amarela");
+				break;
+			case 1:
+			System.out.println("Dourada");
+				break;
+			case 2:
+			System.out.println("Laranja");
+				break;
+			case 3:
+			System.out.println("Jade");
+				break;
+			case 4:
+			System.out.println("Verde");
+				break;
+			case 5:
+			System.out.println("Roxa");
+				break;
+			case 6:
+			System.out.println("Azul");
+				break;
+			case 7:
+			System.out.println("Vermelha");
+				break;
+			case 8:
+			System.out.println("Marrom Clara");
+				break;
+			case 9:
+			System.out.println("Marrom");
+				break;
+			case 10:
+			System.out.println("Preta");
+				break;
+		}
 		System.out.printf("Período: %s\n", get_periodo() == 1 ? "matutino" : get_periodo() == 2 ? "vespertino" : "noturno");
 		System.out.printf("Armas: %s\n", get_arma() ? "sim" : "não");
 	}

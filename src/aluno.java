@@ -4,7 +4,7 @@
 
 public class aluno extends Info{
     private float mensalidade; // DEFINIR MENSALIDADE DO ALUNO AO CADASTRAR EM UMA AULA
-	private boolean mes_pago;
+	private boolean mes_pago, auxiliar;
     private int atraso_conta, forma_pagamento, faixa;
 
     //Construtores
@@ -19,6 +19,8 @@ public class aluno extends Info{
 		this.mes_pago = true;
 		this.mensalidade = 0;
 		super.nascimento = nascimento;
+		this.faixa = 0;
+		this.auxiliar = false;
 	}
 	/*
     public aluno(String nome, String CPF, String telefone){
@@ -65,8 +67,8 @@ public class aluno extends Info{
 	}
 
 	@Override
-	public void set_nascimento(int Dia, int Mes, int Ano){
-		this.nascimento = new Data(Dia, Mes, Ano);
+	public void set_nascimento(Data data){
+		this.nascimento = data;
 	}
 
 	public int get_atraso_conta(){
@@ -93,6 +95,17 @@ public class aluno extends Info{
 		return this.faixa;
 	}
 
+	public void set_auxiliar(boolean auxiliar){
+		if(this.faixa >= 9 && auxiliar)
+			this.auxiliar = auxiliar;
+		else if(!auxiliar)
+			this.auxiliar = auxiliar;
+	}
+
+	public boolean get_auxiliar(){
+		return this.auxiliar;
+	}
+
 	// Método que atribui atraso da conta de um cliente
 	public void atraso(int meses){
 		this.atraso_conta += meses;
@@ -117,48 +130,49 @@ public class aluno extends Info{
 		System.out.printf("Número codigo: %.08s\n", get_codigo());
 		System.out.print("Faixa: ");
 		switch(get_faixa()){
-			case 1:
+			case 0:
 			System.out.println("Amarela");
 				break;
-			case 2:
+			case 1:
 			System.out.println("Dourada");
 				break;
-			case 3:
+			case 2:
 			System.out.println("Laranja");
 				break;
-			case 4:
+			case 3:
 			System.out.println("Jade");
 				break;
-			case 5:
+			case 4:
 			System.out.println("Verde");
 				break;
-			case 6:
+			case 5:
 			System.out.println("Roxa");
 				break;
-			case 7:
+			case 6:
 			System.out.println("Azul");
 				break;
-			case 8:
+			case 7:
 			System.out.println("Vermelha");
 				break;
-			case 9:
+			case 8:
 			System.out.println("Marrom Clara");
 				break;
-			case 10:
+			case 9:
 			System.out.println("Marrom");
 				break;
-			case 11:
+			case 10:
 			System.out.println("Preta");
 				break;
 		}
+		System.out.printf("Auxiliar: %s\n", get_auxiliar() ? "sim" : "não");
 		System.out.printf("Valor da mensalidade: %.2f\n", get_mensalidade());
-		System.out.printf("Forma de Pagamento:%s\n", get_forma_pagamento() == 1 ? "Boleto bancário" : "Débito automático");
+		System.out.printf("Forma de Pagamento: %s\n", get_forma_pagamento() == 1 ? "boleto bancário" : "débito automático");
 		System.out.printf("Mensalidade: ");
 		if(get_mes_pago()){
-			System.out.println("Em dia");
+			System.out.println("em dia");
 		}
 		else{
-			System.out.printf("Atrasado %d meses\n", get_atraso_conta());
+			System.out.printf("atrasado %d meses\n", get_atraso_conta());
 		}
 	}
 
