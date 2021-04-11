@@ -9,7 +9,7 @@ public class menu{
 
 		int menu_option = 0, submenu_option = 0, sub_inter_menuoption = 0, contador_codigo_aluno = 0, contador_codigo_professor = 0, contador_codigo_aula = 0,forma_pag = 1, faixa = 1, periodo = 1;
 		boolean error = false, encontrou = false, invalido = false, armas = true;
-		String procurar = "", nome = "", CPF = "", email = "", telefone = "",codigo = "";
+		String procurar = "", nome = "", CPF = "", email = "", telefone = "",codigo = "", senha = "",senhaMestre = "admin";
 		aluno aluno_auxiliar;
 		professor professor_auxiliar;
 		aula aula_auxiliar;
@@ -46,6 +46,7 @@ public class menu{
 					do{
 						try{
 							error = false;
+							System.out.println("0 - Menu principal");
 							System.out.println("1 - Cadastro Aluno");
 							/*
 							coleta nome, CPF, email, telefone, data de nascimento e forma de pagamento
@@ -78,6 +79,8 @@ public class menu{
 						email = insereEmail();
 						telefone = insereTelefone();
 						data = insereData();
+						input.nextLine();
+						senha = insereSenha();
 					}
 
 					switch(submenu_option){
@@ -95,7 +98,7 @@ public class menu{
 							}while(invalido);
 							forma_pag = insereFormaPagamento();
 							contador_codigo_aluno++;
-							aluno_auxiliar = new aluno(nome,CPF,email,telefone,"A"+Integer.toString(contador_codigo_aluno),forma_pag,data);
+							aluno_auxiliar = new aluno(nome,CPF,email,telefone,"A"+Integer.toString(contador_codigo_aluno),forma_pag,data,senha);
 							alunos.add(aluno_auxiliar);
 							System.out.println("Aluno cadastrado com sucesso. Pressione ENTER para continuar.");
 							break;
@@ -113,7 +116,7 @@ public class menu{
 								}
 							}while(invalido);
 							contador_codigo_professor++;
-							professor_auxiliar = new professor(nome,CPF,email,telefone,"P"+Integer.toString(contador_codigo_professor),data);
+							professor_auxiliar = new professor(nome,CPF,email,telefone,"P"+Integer.toString(contador_codigo_professor),data,senha);
 							professores.add(professor_auxiliar);
 							System.out.println("Professor cadastrado com sucesso. Pressione ENTER para continuar.");
 							break;
@@ -142,6 +145,7 @@ public class menu{
 					do{
 						try{
 							error = false;
+							System.out.println("0 - Menu principal");
 							System.out.println("1 - Remoção Aluno");
 							System.out.println("2 - Remoção Professor");
 							System.out.println("3 - Remoção Aula");
@@ -163,7 +167,7 @@ public class menu{
 							}
 							exibir(alunos);
 							System.out.print("\n->");
-							procurar = input.nextLine();
+							input.nextLine();
 							procurar = input.nextLine();
 							encontrou = false;
 							procurar = procurar.toUpperCase();
@@ -187,7 +191,7 @@ public class menu{
 							}
 							exibir(professores);
 							System.out.print("\n->");
-							procurar = input.nextLine();
+							input.nextLine();
 							procurar = input.nextLine();
 							encontrou = false;
 							procurar = procurar.toUpperCase();
@@ -211,7 +215,7 @@ public class menu{
 							}
 							exibir(aulas);
 							System.out.print("\n->");
-							procurar = input.nextLine();
+							input.nextLine();
 							procurar = input.nextLine();
 							encontrou = false;
 							procurar = procurar.toUpperCase();
@@ -247,6 +251,7 @@ public class menu{
 					do{
 						try{
 							error = false;
+							System.out.println("0 - Menu principal");
 							System.out.println("1 - Consulta Aluno");
 							System.out.println("2 - Consulta Professor");
 							System.out.println("3 - Consulta Aula");
@@ -270,20 +275,32 @@ public class menu{
 							exibir(alunos);
 							System.out.println("Exibir todos - 0");
 							System.out.print("->");
-							procurar = input.nextLine();
+							input.nextLine();
 							procurar = input.nextLine();
 							procurar = procurar.toUpperCase();
 							if(procurar.equals("0")){
-								for(aluno al : alunos){
-									al.exibe();
-									System.out.println();
+								senha = insereSenha();
+								if(senha.equals(senhaMestre)){
+									for(aluno al : alunos){
+										al.exibe();
+										System.out.println();
+									}
+								}
+								else{
+									System.out.println("Senha incorreta!");
 								}
 							}
 							else{
 								encontrou = false;
 								for(aluno al : alunos){
 									if(procurar.equals(al.get_codigo())){
-										al.exibe();
+										senha = insereSenha();
+										if(senha.equals(al.get_senha()) || senha.equals(senhaMestre)){
+											al.exibe();
+										}
+										else{
+											System.out.println("Senha incorreta!");
+										}
 										encontrou = true;
 										break;
 									}
@@ -303,20 +320,32 @@ public class menu{
 							exibir(professores);
 							System.out.println("Exibir todos - 0");
 							System.out.print("\n->");
-							procurar = input.nextLine();
+							input.nextLine();
 							procurar = input.nextLine();
 							encontrou = false;
 							procurar = procurar.toUpperCase();
 							if(procurar.equals("0")){
-								for(professor pr : professores){
-									pr.exibe();
-									System.out.println();
+								senha = insereSenha();
+								if(senha.equals(senhaMestre)){
+									for(professor pr : professores){
+										pr.exibe();
+										System.out.println();
+									}
+								}
+								else{
+									System.out.println("Senha incorreta!");
 								}
 							}
 							else{
 								for(professor pr : professores){
 									if(procurar.equals(pr.get_codigo())){
-										pr.exibe();
+										senha = insereSenha();
+										if(senha.equals(pr.get_senha()) || senha.equals(senhaMestre)){
+											pr.exibe();
+										}
+										else{
+											System.out.println("Senha incorreta!");
+										}
 										encontrou = true;
 										break;
 									}
@@ -336,7 +365,7 @@ public class menu{
 							exibir(aulas);
 							System.out.println("Exibir todos - 0");
 							System.out.print("\n->");
-							procurar = input.nextLine();
+							input.nextLine();
 							procurar = input.nextLine();
 							procurar = procurar.toUpperCase();
 							if(procurar.equals("0")){
@@ -373,6 +402,7 @@ public class menu{
 					do{
 						try{
 							error = false;
+							System.out.println("0 - Menu principal");
 							System.out.println("1 - Atualizar dados do Aluno");
 							System.out.println("2 - Atualizar dados do Professor");
 							System.out.println("3 - Atualizar dados da Aula");
@@ -396,68 +426,78 @@ public class menu{
 							exibir(alunos);
 							System.out.println();
 							System.out.print("->");
-							procurar = input.nextLine();
+							input.nextLine();
 							procurar = input.nextLine();
 							procurar = procurar.toUpperCase();
 							encontrou = false;
 							for(aluno al : alunos){
 								if(procurar.equals(al.get_codigo())){
-									do{
-										try{
-											error = false;
-											System.out.println("1 - Nome");
-											System.out.println("2 - CPF");
-											System.out.println("3 - Email");
-											System.out.println("4 - Telefone");
-											System.out.println("5 - Data de Nascimento");
-											System.out.println("6 - Forma de Pagamento");
-											System.out.println("7 - Auxiliar");
-											System.out.println("8 - Faixa");
-											System.out.print("->");
-											sub_inter_menuoption = input.nextInt();
-										}
-										catch(InputMismatchException InputMismatchException){
-											error = true;
-											System.out.println("Insira um número inteiro dentro do intervalo do menu para prosseguir. Pressione qualquer tecla para continuar.");
-											input.nextLine();
-										}
-									}while(error || menu_option > 8 || menu_option < 0);
-									switch(sub_inter_menuoption){
-										case 1:
-											al.set_nome(insereNome());
-											break;
-										case 2:
-											do{
-												invalido = false;
-												CPF = insereCPF();
-												for(aluno a : alunos){
-													if(CPF.equals(a.get_CPF())){
-														invalido = true;
-														System.out.println("CPF já existente no sistema, tente novamente.");
-														break;
+									senha = insereSenha();
+									if(senha.equals(al.get_senha()) || senha.equals(senhaMestre)){
+										do{
+											try{
+												error = false;
+												System.out.println("1 - Nome");
+												System.out.println("2 - CPF");
+												System.out.println("3 - Email");
+												System.out.println("4 - Telefone");
+												System.out.println("5 - Data de Nascimento");
+												System.out.println("6 - Forma de Pagamento");
+												System.out.println("7 - Auxiliar");
+												System.out.println("8 - Faixa");
+												System.out.println("9 - Senha");
+												System.out.print("->");
+												sub_inter_menuoption = input.nextInt();
+											}
+											catch(InputMismatchException InputMismatchException){
+												error = true;
+												System.out.println("Insira um número inteiro dentro do intervalo do menu para prosseguir. Pressione qualquer tecla para continuar.");
+												input.nextLine();
+											}
+										}while(error || menu_option > 9 || menu_option < 1);
+										switch(sub_inter_menuoption){
+											case 1:
+												al.set_nome(insereNome());
+												break;
+											case 2:
+												do{
+													invalido = false;
+													CPF = insereCPF();
+													for(aluno a : alunos){
+														if(CPF.equals(a.get_CPF())){
+															invalido = true;
+															System.out.println("CPF já existente no sistema, tente novamente.");
+															break;
+														}
 													}
-												}
-											}while(invalido);
-											al.set_CPF(CPF);
-											break;
-										case 3:
-											al.set_email(insereEmail());
-											break;
-										case 4:
-											al.set_telefone(insereTelefone());
-											break;
-										case 5:
-											al.set_nascimento(insereData());
-											break;
-										case 6:
-											al.set_forma_pagamento(insereFormaPagamento());
-											break;
-										case 7:
-											al.set_auxiliar(insereAuxiliar());
-											break;
-										case 8:
-											al.set_faixa(insereFaixa());
-											break;
+												}while(invalido);
+												al.set_CPF(CPF);
+												break;
+											case 3:
+												al.set_email(insereEmail());
+												break;
+											case 4:
+												al.set_telefone(insereTelefone());
+												break;
+											case 5:
+												al.set_nascimento(insereData());
+												break;
+											case 6:
+												al.set_forma_pagamento(insereFormaPagamento());
+												break;
+											case 7:
+												al.set_auxiliar(insereAuxiliar());
+												break;
+											case 8:
+												al.set_faixa(insereFaixa());
+												break;
+											case 9:
+												al.set_senha(senha,insereSenha());
+												break;
+										}
+									}
+									else{
+										System.out.println("Senha incorreta!");
 									}
 									encontrou = true;
 									break;
@@ -477,56 +517,67 @@ public class menu{
 							exibir(professores);
 							System.out.println();
 							System.out.print("\n->");
-							procurar = input.nextLine();
+							input.nextLine();
 							procurar = input.nextLine();
 							encontrou = false;
 							procurar = procurar.toUpperCase();
 							for(professor pr : professores){
 								if(procurar.equals(pr.get_codigo())){
-									do{
-										try{
-											error = false;
-											System.out.println("1 - Nome");
-											System.out.println("2 - CPF");
-											System.out.println("3 - Email");
-											System.out.println("4 - Telefone");
-											System.out.println("5 - Data de Nascimento");
-											System.out.print("->");
-											sub_inter_menuoption = input.nextInt();
-										}
-										catch(InputMismatchException InputMismatchException){
-											error = true;
-											System.out.println("Insira um número inteiro dentro do intervalo do menu para prosseguir. Pressione qualquer tecla para continuar.");
-											input.nextLine();
-										}
-									}while(error || menu_option > 5 || menu_option < 0);
-									switch(sub_inter_menuoption){
-										case 1:
-											pr.set_nome(insereNome());
-											break;
-										case 2:
-											do{
-												invalido = false;
-												CPF = insereCPF();
-												for(professor p : professores){
-													if(CPF.equals(p.get_CPF())){
-														invalido = true;
-														System.out.println("CPF já existente no sistema, tente novamente.");
-														break;
+									input.nextLine();
+									senha = insereSenha();
+									if(senha.equals(pr.get_senha()) || senha.equals(senhaMestre)){
+										do{
+											try{
+												error = false;
+												System.out.println("1 - Nome");
+												System.out.println("2 - CPF");
+												System.out.println("3 - Email");
+												System.out.println("4 - Telefone");
+												System.out.println("5 - Data de Nascimento");
+												System.out.println("6 - Senha");
+												System.out.print("->");
+												sub_inter_menuoption = input.nextInt();
+											}
+											catch(InputMismatchException InputMismatchException){
+												error = true;
+												System.out.println("Insira um número inteiro dentro do intervalo do menu para prosseguir. Pressione qualquer tecla para continuar.");
+												input.nextLine();
+											}
+										}while(error || menu_option > 6 || menu_option < 1);
+										switch(sub_inter_menuoption){
+											case 1:
+												pr.set_nome(insereNome());
+												break;
+											case 2:
+												do{
+													invalido = false;
+													CPF = insereCPF();
+													for(professor p : professores){
+														if(CPF.equals(p.get_CPF())){
+															invalido = true;
+															System.out.println("CPF já existente no sistema, tente novamente.");
+															break;
+														}
 													}
-												}
-											}while(invalido);
-											pr.set_CPF(CPF);
-											break;
-										case 3:
-											pr.set_email(insereEmail());
-											break;
-										case 4:
-											pr.set_telefone(insereTelefone());
-											break;
-										case 5:
-											pr.set_nascimento(insereData());
-											break;
+												}while(invalido);
+												pr.set_CPF(CPF);
+												break;
+											case 3:
+												pr.set_email(insereEmail());
+												break;
+											case 4:
+												pr.set_telefone(insereTelefone());
+												break;
+											case 5:
+												pr.set_nascimento(insereData());
+												break;
+											case 6:
+												pr.set_senha(senha,insereSenha());
+												break;
+										}
+									}
+									else{
+										System.out.println("Senha incorreta!");
 									}
 									encontrou = true;
 									break;
@@ -546,7 +597,7 @@ public class menu{
 							exibir(aulas);
 							System.out.println();
 							System.out.print("\n->");
-							procurar = input.nextLine();
+							input.nextLine();
 							procurar = input.nextLine();
 							procurar = procurar.toUpperCase();
 							encontrou = false;
@@ -566,7 +617,7 @@ public class menu{
 											System.out.println("Insira um número inteiro dentro do intervalo do menu para prosseguir. Pressione qualquer tecla para continuar.");
 											input.nextLine();
 										}
-									}while(error || menu_option > 5 || menu_option < 0);
+									}while(error || menu_option > 5 || menu_option < 1);
 									switch(sub_inter_menuoption){
 										case 1:
 											au.set_arma(insereArmas());
@@ -597,39 +648,44 @@ public class menu{
 					break;
 // ****************************************************************************************************
 				case 6:
-					System.out.print("Insira a código do aluno/professor que deseja entrar\n->");
-					input.nextLine();
-					codigo = input.nextLine();
-					encontrou = false;
-					codigo = codigo.toUpperCase();
-					if(codigo.charAt(0) == 'A'){
-						for(aluno al : alunos){
-							if(al.get_codigo().equals(codigo)){
-								encontrou = true;
-								if(al.get_mes_pago()){
-									System.out.printf("Seja bem vindo %s.", al.get_nome());
-									break;
-								}
-								else{
-									System.out.printf("Pague sua mensalidade para entrar, %s.", al.get_nome());
-									break;
-								}
-							}
-						}
-						if(!encontrou){
-							System.out.println("Aluno inexistente no sistema.");
-						}
+					if(alunos.size() == 0 && professores.size() == 0){
+						System.out.println("Cadastros inexistentes.");
 					}
-					else if(codigo.charAt(0) == 'P'){
-						for(professor pr : professores){
-							if(pr.get_codigo().equals(codigo)){
-								encontrou = true;
-								System.out.printf("Aula incrementada, %s", pr.get_nome());
-								pr.IncrementaAula();
+					else{
+						System.out.print("Insira a código do aluno/professor que deseja entrar\n->");
+						input.nextLine();
+						codigo = input.nextLine();
+						encontrou = false;
+						codigo = codigo.toUpperCase();
+						if(codigo.charAt(0) == 'A'){
+							for(aluno al : alunos){
+								if(al.get_codigo().equals(codigo)){
+									encontrou = true;
+									if(al.get_mes_pago()){
+										System.out.printf("Seja bem vindo %s.", al.get_nome());
+										break;
+									}
+									else{
+										System.out.printf("Pague sua mensalidade para entrar, %s.", al.get_nome());
+										break;
+									}
+								}
+							}
+							if(!encontrou){
+								System.out.println("Aluno inexistente no sistema.");
 							}
 						}
-						if(!encontrou){
-							System.out.println("Professor inexistente no sistema.");
+						else if(codigo.charAt(0) == 'P'){
+							for(professor pr : professores){
+								if(pr.get_codigo().equals(codigo)){
+									encontrou = true;
+									System.out.printf("Aula incrementada, %s", pr.get_nome());
+									pr.IncrementaAula();
+								}
+							}
+							if(!encontrou){
+								System.out.println("Professor inexistente no sistema.");
+							}
 						}
 					}
 					try{
@@ -672,10 +728,17 @@ public class menu{
 	public static String insereNome(){
 		String nome;
 		System.out.print("Nome ->");
-		nome = input.nextLine();
+		input.nextLine();
 		nome = input.nextLine();
 		nome = nome.toUpperCase();
 		return nome;
+	}
+
+	public static String insereSenha(){
+		String senha;
+		System.out.print("Senha ->");
+		senha = input.nextLine();
+		return senha;
 	}
 
 	//Insere CPF
@@ -684,7 +747,7 @@ public class menu{
 		String CPF = "";
 		do{//Verifica conflito CPF
 			System.out.print("CPF->"); // 000 000 000 00
-			CPF = input.nextLine();
+			//CPF = input.nextLine();
 			CPF = input.nextLine();
 			if(CPF.matches("[0-9]+") && CPF.length() == 11){
 				invalido = false;

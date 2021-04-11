@@ -8,7 +8,7 @@ public class aluno extends Info{
     private int atraso_conta, forma_pagamento, faixa;
 
     //Construtores
-	public aluno(String nome, String CPF, String email, String telefone, String codigo, int forma_pagamento, Data nascimento){
+	public aluno(String nome, String CPF, String email, String telefone, String codigo, int forma_pagamento, Data nascimento, String senha){
 		super.nome = nome;
         super.CPF = CPF;
         super.email = email;
@@ -21,6 +21,7 @@ public class aluno extends Info{
 		super.nascimento = nascimento;
 		this.faixa = 0;
 		this.auxiliar = false;
+		super.senha = senha;
 	}
 	/*
     public aluno(String nome, String CPF, String telefone){
@@ -40,22 +41,22 @@ public class aluno extends Info{
 
 	@Override
 	public void set_nome(String nome){
-		this.nome = nome;
+		super.nome = nome;
 	}
 
 	@Override
 	public void set_CPF(String CPF){
-		this.CPF = CPF;
+		super.CPF = CPF;
 	}
 
 	@Override
 	public void set_email(String email){
-		this.email = email;
+		super.email = email;
 	}
 
 	@Override
     public void set_telefone(String telefone){
-		this.telefone = telefone;
+		super.telefone = telefone;
 	}
 
 	public float get_mensalidade(){
@@ -68,7 +69,14 @@ public class aluno extends Info{
 
 	@Override
 	public void set_nascimento(Data data){
-		this.nascimento = data;
+		super.nascimento = data;
+	}
+
+	@Override
+	public void set_senha(String senhaAntiga, String senhaNova){
+		if(senhaAntiga.equals(get_senha())){
+			super.senha = senhaNova;
+		}
 	}
 
 	public int get_atraso_conta(){
@@ -122,6 +130,7 @@ public class aluno extends Info{
 	// Método que exibe as informações de um cliente
 	@Override
 	public void exibe(){
+		System.out.println();
 		System.out.printf("Nome: %s\n", get_nome());
 		System.out.printf("CPF: %s\n", get_CPF());
 		System.out.printf("Data de nascimento: " + get_nascimento()+"\n");
@@ -174,6 +183,7 @@ public class aluno extends Info{
 		else{
 			System.out.printf("atrasado %d meses\n", get_atraso_conta());
 		}
+		System.out.println();
 	}
 
 	// Método que retorna nome e código de um cliente para escolha de consulta

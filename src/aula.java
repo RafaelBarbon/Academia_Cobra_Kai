@@ -43,6 +43,7 @@ public class aula{
     }
 
 	public void exibe(){
+		System.out.println();
 		System.out.printf("Código: %s\n", get_codigo());
 		System.out.printf("Faixa: ");
 		switch(get_faixa()){
@@ -82,6 +83,7 @@ public class aula{
 		}
 		System.out.printf("Período: %s\n", get_periodo() == 1 ? "matutino" : get_periodo() == 2 ? "vespertino" : "noturno");
 		System.out.printf("Armas: %s\n", get_arma() ? "sim" : "não");
+		System.out.println();
 	}
 
 	public String toString(){

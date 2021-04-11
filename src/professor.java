@@ -4,7 +4,7 @@
 
 public class professor extends Info{
 	private int aulasMes;
-    public professor(String nome, String CPF, String email, String telefone, String codigo, Data nascimento){
+    public professor(String nome, String CPF, String email, String telefone, String codigo, Data nascimento, String senha){
         this.nome = nome;
         this.CPF = CPF;
         this.email = email;
@@ -12,6 +12,7 @@ public class professor extends Info{
         this.codigo = codigo;
         this.nascimento = nascimento;
 		this.aulasMes = 0;
+		this.senha = senha;
     }
 
 	public int get_aulasMes(){
@@ -20,27 +21,34 @@ public class professor extends Info{
 
     @Override
 	public void set_nome(String nome){
-		this.nome = nome;
+		super.nome = nome;
 	}
 
     @Override
 	public void set_CPF(String CPF){
-		this.CPF = CPF;
+		super.CPF = CPF;
 	}
 
     @Override
 	public void set_email(String email){
-		this.email = email;
+		super.email = email;
 	}
 
     @Override
     public void set_telefone(String telefone){
-		this.telefone = telefone;
+		super.telefone = telefone;
 	}
 
     @Override
 	public void set_nascimento(Data data){
-		this.nascimento = data;
+		super.nascimento = data;
+	}
+
+	@Override
+	public void set_senha(String senhaAntiga, String senhaNova){
+		if(senhaAntiga.equals(get_senha())){
+			super.senha = senhaNova;
+		}
 	}
 
 	// Método que inicia o mês, zerando o número de aulas dos professores
@@ -56,12 +64,14 @@ public class professor extends Info{
 	// Método que exibe as informações do professor
 	@Override
 	public void exibe(){
+		System.out.println();
 		System.out.printf("Nome: %s\n", get_nome());
 		System.out.printf("CPF: %s\n", get_CPF());
 		System.out.printf("Data de nascimento: " + get_nascimento()+"\n");
 		System.out.printf("Email: %s\n", get_email());
 		System.out.printf("Telefone: %s\n", get_telefone());
 		System.out.printf("Número codigo: %.08s\n", get_codigo());
+		System.out.println();
 	}
 
 	// Método que retorna nome e código de um cliente para escolha de consulta

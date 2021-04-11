@@ -3,7 +3,7 @@
 // Rafael Silva Barbon			19243633
 
 abstract class Info {
-	protected String nome, CPF, email, telefone, codigo;
+	protected String nome, CPF, email, telefone, codigo, senha;
 	protected Data nascimento;
 
 	String get_nome(){
@@ -39,6 +39,12 @@ abstract class Info {
 	}
 
 	abstract void set_nascimento(Data data);
+
+	String get_senha(){
+		return this.senha;
+	}
+
+    abstract void set_senha(String senhaAntiga, String senhaNova);
 
 	abstract void exibe();
 }
