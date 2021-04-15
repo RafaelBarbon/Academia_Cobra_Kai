@@ -3,16 +3,30 @@
 // Rafael Silva Barbon			19243633
 
 import java.util.*;
+import java.time.*;
 public class menu{
 	static Scanner input = new Scanner(System.in);
 	public static void main(String[] args){
+		/*
+		//Coleta hora e data
+		// data/hora atual
+		LocalDateTime agora = LocalDateTime.now();
+
+		// formatar a data
+		DateTimeFormatter formatterData = DateTimeFormatter.ofPattern("dd/MM/uuuu");
+		String dataFormatada = formatterData.format(agora);
+
+		// formatar a hora
+		DateTimeFormatter formatterHora = DateTimeFormatter.ofPattern("HH:mm:ss");
+		String horaFormatada = formatterHora.format(agora);
+		*/
 
 		int menu_option = 0, submenu_option = 0, sub_inter_menuoption = 0, contador_codigo_aluno = 0, contador_codigo_professor = 0, contador_codigo_aula = 0,forma_pag = 1, faixa = 1, periodo = 1;
 		boolean error = false, encontrou = false, invalido = false, armas = true;
-		String procurar = "", nome = "", CPF = "", email = "", telefone = "",codigo = "", senha = "",senhaMestre = "admin";
-		aluno aluno_auxiliar;
-		professor professor_auxiliar;
-		aula aula_auxiliar;
+		String procurar = "", nome = "", CPF = "", email = "", telefone = "",codigo = "", senha = "",senhaMestre = "admin", vincular = "", confirmaSenha = "";
+		aluno aluno_auxiliar = null;
+		professor professor_auxiliar = null;
+		aula aula_auxiliar = null;
 		Data data = null;
 		// Listas de alunos
         LinkedList <aluno> alunos = new LinkedList<aluno>();
@@ -30,7 +44,7 @@ public class menu{
 					System.out.println("4 - Consulta."); // Consultar alunos, professores ou aulas
 					System.out.println("5 - Atualizar dados");
 					System.out.println("6 - Entrada"); // "Catraca"
-					System.out.println("7 - Sincronizar contas com o banco.");
+					System.out.println("7 - Sincronizar contas com o banco e enviar arquivos por email.");
 					System.out.print("-> ");
 					menu_option = input.nextInt();
 				}
@@ -80,7 +94,13 @@ public class menu{
 						telefone = insereTelefone();
 						data = insereData();
 						input.nextLine();
-						senha = insereSenha();
+						do{
+							senha = insereSenha(false);
+							confirmaSenha = insereSenha(true);
+							if(!senha.equals(confirmaSenha)){
+								System.out.println("Senhas distintas! Tente novamente.");
+							}
+						}while(!senha.equals(confirmaSenha));
 					}
 
 					switch(submenu_option){
@@ -101,6 +121,7 @@ public class menu{
 							aluno_auxiliar = new aluno(nome,CPF,email,telefone,"A"+Integer.toString(contador_codigo_aluno),forma_pag,data,senha);
 							alunos.add(aluno_auxiliar);
 							System.out.println("Aluno cadastrado com sucesso. Pressione ENTER para continuar.");
+							input.nextLine();
 							break;
 // ****************************************************************************************************
 						case 2: // Professor
@@ -130,6 +151,7 @@ public class menu{
 							aula_auxiliar = new aula(faixa, armas, periodo, "C"+Integer.toString(contador_codigo_aula));
 							aulas.add(aula_auxiliar);
 							System.out.println("Aula cadastrada com sucesso. Pressione ENTER para continuar.");
+							input.nextLine();
 							break;
 					}
 					input.nextLine();
@@ -173,9 +195,15 @@ public class menu{
 							procurar = procurar.toUpperCase();
 							for(aluno al : alunos){
 								if(procurar.equals(al.get_codigo())){
-									alunos.remove(al);
-									System.out.println("Aluno removido com sucesso");
+									senha = insereSenha(false);
 									encontrou = true;
+									if(senha.equals(al.get_senha()) || senha.equals(senhaMestre)){
+										alunos.remove(al);
+										System.out.println("Aluno removido com sucesso");
+									}
+									else{
+										System.out.println("Senha incorreta.");
+									}
 									break;
 								}
 							}
@@ -197,9 +225,15 @@ public class menu{
 							procurar = procurar.toUpperCase();
 							for(professor pr : professores){
 								if(procurar.equals(pr.get_codigo())){
-									professores.remove(pr);
-									System.out.println("Professor removido com sucesso");
+									senha = insereSenha(false);
 									encontrou = true;
+									if(senha.equals(pr.get_senha()) || senha.equals(senhaMestre)){
+										professores.remove(pr);
+										System.out.println("Professor removido com sucesso");
+									}
+									else{
+										System.out.println("Senha incorreta.");
+									}
 									break;
 								}
 							}
@@ -221,6 +255,9 @@ public class menu{
 							procurar = procurar.toUpperCase();
 							for(aula au : aulas){
 								if(procurar.equals(au.get_codigo())){
+									for(aluno a : alunos){
+										a.del_aula(au);
+									}
 									aulas.remove(au);
 									System.out.println("Aula removida com sucesso");
 									encontrou = true;
@@ -240,6 +277,135 @@ public class menu{
 					break;
 // ****************************************************************************************************
 				case 3:
+					if(alunos.size() == 0){
+						System.out.println("Não há alunos cadastrados no sistema");
+					}
+					else if(aulas.size() == 0){
+						System.out.println("Não há aulas cadastradas no sistema");
+					}
+					else{
+						do{
+							try{
+								error = false;
+								System.out.println("0 - Menu principal");
+								System.out.println("1 - Vincular aula a um aluno");
+								System.out.println("2 - Desvincular aula de um aluno");
+								System.out.print("->");
+								submenu_option = input.nextInt();
+							}
+							catch(InputMismatchException InputMismatchException){
+								error = true;
+								System.out.println("Insira um número inteiro dentro do intervalo do menu para prosseguir. Pressione qualquer tecla para continuar.");
+								input.nextLine();
+							}
+						}while(error || submenu_option > 2 || submenu_option < 0);
+						clear();
+						switch(submenu_option){
+							case 1:
+								do{
+									encontrou = false;
+									System.out.println("Selecione a aula a ser vinculada:");
+									exibir(aulas);
+									System.out.print("\n->");
+									input.nextLine();
+									codigo = input.nextLine();
+									codigo = codigo.toUpperCase();
+									for(aula au : aulas){
+										if(codigo.equals(au.get_codigo())){
+											aula_auxiliar = au;
+											encontrou = true;
+											break;
+										}
+									}
+								}while(!encontrou);
+								do{
+									encontrou = false;
+									System.out.println("Selecione o aluno a ser vinculado:");
+									exibir(alunos);
+									System.out.print("->");
+									vincular = input.nextLine();
+									vincular = vincular.toUpperCase();
+									for(aluno a : alunos){
+										if(vincular.equals(a.get_codigo())){
+											a.add_aula(aula_auxiliar);
+											encontrou = true;
+											break;
+										}
+									}
+									if(encontrou){
+										System.out.println("\nAula vinculada do aluno.");
+									}
+									else{
+										System.out.println("Aluno inexistente no sistema.");
+									}
+									do{
+										error = false;
+										try{
+											System.out.print("\nDeseja vincular outro aluno a esta mesma aula?(1 - sim, 2 - não)\n->");
+											sub_inter_menuoption = input.nextInt();
+										}
+										catch(InputMismatchException InputMismatchException){
+											error = true;
+											System.out.println("Insira um número inteiro dentro do intervalo para prosseguir. Pressione qualquer tecla para continuar.");
+											input.nextLine();
+										}
+									}while(error || sub_inter_menuoption > 2 || sub_inter_menuoption < 1);
+								}while(sub_inter_menuoption == 1);
+								break;
+							case 2:
+								do{
+									encontrou = false;
+									System.out.println("Selecione a aula a ser desvinculada:");
+									exibir(aulas);
+									System.out.println("->");
+									codigo = input.nextLine();
+									codigo = codigo.toUpperCase();
+									for(aula au : aulas){
+										if(codigo.equals(au.get_codigo())){
+											aula_auxiliar = au;
+											encontrou = true;
+											break;
+										}
+									}
+								}while(!encontrou);
+								do{
+									encontrou = false;
+									System.out.println("Selecione o aluno a ser desvinculado:");
+									exibir(alunos);
+									System.out.print("->");
+									input.nextLine();
+									vincular = input.nextLine();
+									vincular = vincular.toUpperCase();
+									for(aluno a : alunos){
+										if(vincular.equals(a.get_codigo())){
+											a.del_aula(aula_auxiliar);
+											encontrou = true;
+											break;
+										}
+									}
+									if(encontrou){
+										System.out.println("\nAula desvinculada do aluno.");
+									}
+									else{
+										System.out.println("Aluno inexistente no sistema.");
+									}
+									do{
+										error = false;
+										try{
+											System.out.print("\nDeseja desvincular outro aluno desta mesma aula?(1 - sim, 2 - não)\n->");
+											sub_inter_menuoption = input.nextInt();
+										}
+										catch(InputMismatchException InputMismatchException){
+											error = true;
+											System.out.println("Insira um número inteiro dentro do intervalo para prosseguir. Pressione qualquer tecla para continuar.");
+											input.nextLine();
+										}
+									}while(error || sub_inter_menuoption > 2 || sub_inter_menuoption < 1);
+								}while(sub_inter_menuoption == 1);
+								break;
+						}
+					}
+					clear();
 					break;
 // ****************************************************************************************************
 				case 4: // Consulta
@@ -279,11 +445,10 @@ public class menu{
 							procurar = input.nextLine();
 							procurar = procurar.toUpperCase();
 							if(procurar.equals("0")){
-								senha = insereSenha();
+								senha = insereSenha(false);
 								if(senha.equals(senhaMestre)){
 									for(aluno al : alunos){
 										al.exibe();
-										System.out.println();
 									}
 								}
 								else{
@@ -294,7 +459,7 @@ public class menu{
 								encontrou = false;
 								for(aluno al : alunos){
 									if(procurar.equals(al.get_codigo())){
-										senha = insereSenha();
+										senha = insereSenha(false);
 										if(senha.equals(al.get_senha()) || senha.equals(senhaMestre)){
 											al.exibe();
 										}
@@ -325,11 +490,10 @@ public class menu{
 							encontrou = false;
 							procurar = procurar.toUpperCase();
 							if(procurar.equals("0")){
-								senha = insereSenha();
+								senha = insereSenha(false);
 								if(senha.equals(senhaMestre)){
 									for(professor pr : professores){
 										pr.exibe();
-										System.out.println();
 									}
 								}
 								else{
@@ -339,7 +503,7 @@ public class menu{
 							else{
 								for(professor pr : professores){
 									if(procurar.equals(pr.get_codigo())){
-										senha = insereSenha();
+										senha = insereSenha(false);
 										if(senha.equals(pr.get_senha()) || senha.equals(senhaMestre)){
 											pr.exibe();
 										}
@@ -371,7 +535,6 @@ public class menu{
 							if(procurar.equals("0")){
 								for(aula au : aulas){
 									au.exibe();
-									System.out.println();
 								}
 							}
 							else{
@@ -390,12 +553,12 @@ public class menu{
 							break;
 					}
 
-						System.out.println("Pressione ENTER para continuar.");
+					System.out.println("Pressione ENTER para continuar.");
+					input.nextLine();
+					if(invalido){
 						input.nextLine();
-						if(invalido){
-							input.nextLine();
-						}
-						clear();
+					}
+					clear();
 					break;
 // ****************************************************************************************************
 				case 5:
@@ -416,6 +579,7 @@ public class menu{
 						}
 					}while(error || submenu_option > 3 || submenu_option < 0);
 					clear();
+					invalido = false;
 					switch(submenu_option){
 						case 1:
 							if(alunos.size() == 0){
@@ -432,7 +596,7 @@ public class menu{
 							encontrou = false;
 							for(aluno al : alunos){
 								if(procurar.equals(al.get_codigo())){
-									senha = insereSenha();
+									senha = insereSenha(false);
 									if(senha.equals(al.get_senha()) || senha.equals(senhaMestre)){
 										do{
 											try{
@@ -492,12 +656,21 @@ public class menu{
 												al.set_faixa(insereFaixa());
 												break;
 											case 9:
-												al.set_senha(senha,insereSenha());
+											do{
+												input.nextLine();
+												vincular = insereSenha(false);
+												confirmaSenha = insereSenha(true);
+												if(!vincular.equals(confirmaSenha)){
+													System.out.println("Senhas distintas! Tente novamente.");
+												}
+											}while(!vincular.equals(confirmaSenha));
+												al.set_senha(senha,vincular,senhaMestre);
 												break;
 										}
 									}
 									else{
 										System.out.println("Senha incorreta!");
+										invalido = true;
 									}
 									encontrou = true;
 									break;
@@ -505,6 +678,9 @@ public class menu{
 							}
 							if(!encontrou){
 								System.out.println("Aluno inexistente no sistema.");
+							}
+							else if(!invalido){
+								System.out.println("Aluno atualizado com sucesso.");
 							}
 							break;
 	// ****************************************************************************************************
@@ -517,14 +693,13 @@ public class menu{
 							exibir(professores);
 							System.out.println();
 							System.out.print("\n->");
-							input.nextLine();
 							procurar = input.nextLine();
 							encontrou = false;
 							procurar = procurar.toUpperCase();
 							for(professor pr : professores){
 								if(procurar.equals(pr.get_codigo())){
 									input.nextLine();
-									senha = insereSenha();
+									senha = insereSenha(false);
 									if(senha.equals(pr.get_senha()) || senha.equals(senhaMestre)){
 										do{
 											try{
@@ -572,12 +747,21 @@ public class menu{
 												pr.set_nascimento(insereData());
 												break;
 											case 6:
-												pr.set_senha(senha,insereSenha());
+												do{
+													input.nextLine();
+													vincular = insereSenha(false);
+													confirmaSenha = insereSenha(true);
+													if(!vincular.equals(confirmaSenha)){
+														System.out.println("Senhas distintas! Tente novamente.");
+													}
+												}while(!vincular.equals(confirmaSenha));
+												pr.set_senha(senha,vincular,senhaMestre);
 												break;
 										}
 									}
 									else{
 										System.out.println("Senha incorreta!");
+										invalido = true;
 									}
 									encontrou = true;
 									break;
@@ -585,6 +769,9 @@ public class menu{
 							}
 							if(!encontrou){
 								System.out.println("Professor inexistente no sistema.");
+							}
+							else if(!invalido){
+								System.out.println("Professor atualizado com sucesso.");
 							}
 							break;
 	// ****************************************************************************************************
@@ -636,14 +823,17 @@ public class menu{
 							if(!encontrou){
 								System.out.println("Aula inexistente no sistema.");
 							}
+							else{
+								System.out.println("Aula atualizada com sucesso.");
+							}
 							break;
 					}
 
 					System.out.println("Pressione ENTER para continuar.");
 					input.nextLine();
-					if(invalido){
-						input.nextLine();
-					}
+					//if(invalido){
+						//input.nextLine();
+					//}
 					clear();
 					break;
 // ****************************************************************************************************
@@ -662,11 +852,11 @@ public class menu{
 								if(al.get_codigo().equals(codigo)){
 									encontrou = true;
 									if(al.get_mes_pago()){
-										System.out.printf("Seja bem vindo %s.", al.get_nome());
+										System.out.printf("Seja bem vindo, %s.", al.get_nome());
 										break;
 									}
 									else{
-										System.out.printf("Pague sua mensalidade para entrar, %s.", al.get_nome());
+										System.out.printf("Pague sua valor para entrar, %s.", al.get_nome());
 										break;
 									}
 								}
@@ -687,12 +877,14 @@ public class menu{
 								System.out.println("Professor inexistente no sistema.");
 							}
 						}
+						else{
+							System.out.println("Pessoa inexistente no sistema.");
+						}
 					}
 					try{
 						Thread.sleep(2000);
 					}
-					catch(InterruptedException e){
-					}
+					catch(InterruptedException e){}
 					clear();
 					break;
 // ****************************************************************************************************
@@ -734,9 +926,14 @@ public class menu{
 		return nome;
 	}
 
-	public static String insereSenha(){
+	public static String insereSenha(boolean confirma){
 		String senha;
-		System.out.print("Senha ->");
+		if(confirma){
+			System.out.print("Confirme senha ->");
+		}
+		else{
+			System.out.print("Senha ->");
+		}
 		senha = input.nextLine();
 		return senha;
 	}
@@ -934,19 +1131,19 @@ public class menu{
 			}
 			try{
 				error = false;
-				System.out.println("Faixa");
-				System.out.println("0 - Amerela");
-				System.out.println("1 - Dourada");
-				System.out.println("2 - Laranja");
-				System.out.println("3 - Jade");
-				System.out.println("4 - Verde");
-				System.out.println("5 - Roxa");
-				System.out.println("6 - Azul");
-				System.out.println("7 - Vermelha");
-				System.out.println("8 - Marrom Claro");
-				System.out.println("9 - Marrom");
-				System.out.println("10 - Preta");
-				System.out.println("->");
+				System.out.println("Faixa:");
+				System.out.println("\t0 - Amerela");
+				System.out.println("\t1 - Dourada");
+				System.out.println("\t2 - Laranja");
+				System.out.println("\t3 - Jade");
+				System.out.println("\t4 - Verde");
+				System.out.println("\t5 - Roxa");
+				System.out.println("\t6 - Azul");
+				System.out.println("\t7 - Vermelha");
+				System.out.println("\t8 - Marrom Claro");
+				System.out.println("\t9 - Marrom");
+				System.out.println("\t10 - Preta");
+				System.out.print("->");
 				faixa = input.nextInt();
 			}
 			catch(InputMismatchException InputMismatchException){

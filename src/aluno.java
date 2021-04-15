@@ -2,10 +2,13 @@
 // Henrique Sartori Siqueira	19240472
 // Rafael Silva Barbon			19243633
 
+import java.util.*;
+
 public class aluno extends Info{
-    private float mensalidade; // DEFINIR MENSALIDADE DO ALUNO AO CADASTRAR EM UMA AULA
+    private float valor; // DEFINIR valor DO ALUNO AO CADASTRAR EM UMA AULA
 	private boolean mes_pago, auxiliar;
     private int atraso_conta, forma_pagamento, faixa;
+	private LinkedList <aula> aulas_matriculadas = new LinkedList<aula>();
 
     //Construtores
 	public aluno(String nome, String CPF, String email, String telefone, String codigo, int forma_pagamento, Data nascimento, String senha){
@@ -17,7 +20,7 @@ public class aluno extends Info{
 		super.codigo = codigo;
 		this.forma_pagamento = forma_pagamento;
 		this.mes_pago = true;
-		this.mensalidade = 0;
+		this.valor = 0;
 		super.nascimento = nascimento;
 		this.faixa = 0;
 		this.auxiliar = false;
@@ -59,12 +62,12 @@ public class aluno extends Info{
 		super.telefone = telefone;
 	}
 
-	public float get_mensalidade(){
-		return this.mensalidade;
+	public float get_valor(){
+		return this.valor;
 	}
 
-	public void set_mensalidade(float mensalidade){
-		this.mensalidade = mensalidade;
+	public void set_valor(float valor){
+		this.valor = valor;
 	}
 
 	@Override
@@ -73,8 +76,8 @@ public class aluno extends Info{
 	}
 
 	@Override
-	public void set_senha(String senhaAntiga, String senhaNova){
-		if(senhaAntiga.equals(get_senha())){
+	public void set_senha(String senhaAntiga, String senhaNova, String senhaMestre){
+		if(senhaAntiga.equals(get_senha()) || senhaAntiga.equals(senhaMestre)){
 			super.senha = senhaNova;
 		}
 	}
@@ -114,10 +117,45 @@ public class aluno extends Info{
 		return this.auxiliar;
 	}
 
+	public boolean add_aula(aula a){
+		if(!aulas_matriculadas.contains(a) && (a.get_faixaN() == faixa || a.get_faixaN()+1 == faixa || a.get_faixaN()-1 == faixa)){
+			aulas_matriculadas.add(a);
+			return true;
+		}
+		return false;
+	}
+
+	public void del_aula(aula a){
+		aulas_matriculadas.remove(a);
+	}
+
+	public void exibe_aulas(){
+		for(aula d : aulas_matriculadas){
+			d.exibe();
+			System.out.println();
+		}
+	}
+
+	public void att_aula(aula a){
+		for(aula d : aulas_matriculadas){
+			if(d.get_codigo() == a.get_codigo()){
+				aulas_matriculadas.remove(d);
+				aulas_matriculadas.add(a);
+				break;
+			}
+		}
+	}
+
+	public int get_aulas(){
+		return this.aulas_matriculadas.size();
+	}
+
 	// Método que atribui atraso da conta de um cliente
 	public void atraso(int meses){
 		this.atraso_conta += meses;
-		this.mes_pago = false;
+		if(this.atraso_conta > 1){
+			this.mes_pago = false;
+		}
 	}
 
 	// Método que torna a situação financeira de um cliente como pago
@@ -136,47 +174,12 @@ public class aluno extends Info{
 		System.out.printf("Data de nascimento: " + get_nascimento()+"\n");
 		System.out.printf("Email: %s\n", get_email());
 		System.out.printf("Telefone: %s\n", get_telefone());
-		System.out.printf("Número codigo: %.08s\n", get_codigo());
-		System.out.print("Faixa: ");
-		switch(get_faixa()){
-			case 0:
-			System.out.println("Amarela");
-				break;
-			case 1:
-			System.out.println("Dourada");
-				break;
-			case 2:
-			System.out.println("Laranja");
-				break;
-			case 3:
-			System.out.println("Jade");
-				break;
-			case 4:
-			System.out.println("Verde");
-				break;
-			case 5:
-			System.out.println("Roxa");
-				break;
-			case 6:
-			System.out.println("Azul");
-				break;
-			case 7:
-			System.out.println("Vermelha");
-				break;
-			case 8:
-			System.out.println("Marrom Clara");
-				break;
-			case 9:
-			System.out.println("Marrom");
-				break;
-			case 10:
-			System.out.println("Preta");
-				break;
-		}
+		System.out.printf("Número codigo: %s\n", get_codigo());
+		System.out.printf("Faixa: %s", get_faixa());
 		System.out.printf("Auxiliar: %s\n", get_auxiliar() ? "sim" : "não");
-		System.out.printf("Valor da mensalidade: %.2f\n", get_mensalidade());
+		System.out.printf("Valor semanal de aulas: %.2f\n", get_valor());
 		System.out.printf("Forma de Pagamento: %s\n", get_forma_pagamento() == 1 ? "boleto bancário" : "débito automático");
-		System.out.printf("Mensalidade: ");
+		System.out.printf("Situação: ");
 		if(get_mes_pago()){
 			System.out.println("em dia");
 		}
@@ -184,11 +187,13 @@ public class aluno extends Info{
 			System.out.printf("atrasado %d meses\n", get_atraso_conta());
 		}
 		System.out.println();
+		exibe_aulas();
+		System.out.println();
 	}
 
 	// Método que retorna nome e código de um cliente para escolha de consulta
 	public String toString(){
-		return String.format("%s - %s\t", get_nome(), get_codigo());
+		return String.format("%s - %s ", get_nome(), get_codigo());
 	}
 }
 

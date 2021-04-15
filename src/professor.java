@@ -45,8 +45,8 @@ public class professor extends Info{
 	}
 
 	@Override
-	public void set_senha(String senhaAntiga, String senhaNova){
-		if(senhaAntiga.equals(get_senha())){
+	public void set_senha(String senhaAntiga, String senhaNova, String senhaMestre){
+		if(senhaAntiga.equals(get_senha()) || senhaAntiga.equals(senhaMestre)){
 			super.senha = senhaNova;
 		}
 	}
@@ -70,12 +70,12 @@ public class professor extends Info{
 		System.out.printf("Data de nascimento: " + get_nascimento()+"\n");
 		System.out.printf("Email: %s\n", get_email());
 		System.out.printf("Telefone: %s\n", get_telefone());
-		System.out.printf("Número codigo: %.08s\n", get_codigo());
+		System.out.printf("Número codigo: %s\n", get_codigo());
 		System.out.println();
 	}
 
 	// Método que retorna nome e código de um cliente para escolha de consulta
 	public String toString(){
-		return String.format("%s - %s\t", get_nome(), get_codigo());
+		return String.format("%s - %s ", get_nome(), get_codigo());
 	}
 }

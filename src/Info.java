@@ -44,7 +44,7 @@ abstract class Info {
 		return this.senha;
 	}
 
-    abstract void set_senha(String senhaAntiga, String senhaNova);
+    abstract void set_senha(String senhaAntiga, String senhaNova, String senhaMestre);
 
 	abstract void exibe();
 }

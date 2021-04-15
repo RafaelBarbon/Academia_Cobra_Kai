@@ -1,3 +1,4 @@
+
 // Alcides Gomes Beato Neto		19060987
 // Henrique Sartori Siqueira	19240472
 // Rafael Silva Barbon			19243633
@@ -14,8 +15,48 @@ public class aula{
 		this.codigo = codigo;
     }
 
-    public int get_faixa(){
-        return this.faixa;
+	public int get_faixaN(){
+		return this.faixa;
+	}
+
+    public String get_faixa(){
+		String ret = "";
+        switch(this.faixa){
+			case 0:
+				ret = "Amarela";
+				break;
+			case 1:
+				ret = "Dourada";
+				break;
+			case 2:
+				ret = "Laranja";
+				break;
+			case 3:
+				ret = "Jade";
+				break;
+			case 4:
+				ret = "Verde";
+				break;
+			case 5:
+				ret = "Roxa";
+				break;
+			case 6:
+				ret = "Azul";
+				break;
+			case 7:
+				ret = "Vermelha";
+				break;
+			case 8:
+				ret = "Marrom Clara";
+				break;
+			case 9:
+				ret = "Marrom";
+				break;
+			case 10:
+				ret = "Preta";
+				break;
+		}
+		return ret;
     }
 
     public boolean get_arma(){
@@ -45,49 +86,14 @@ public class aula{
 	public void exibe(){
 		System.out.println();
 		System.out.printf("Código: %s\n", get_codigo());
-		System.out.printf("Faixa: ");
-		switch(get_faixa()){
-			case 0:
-			System.out.println("Amarela");
-				break;
-			case 1:
-			System.out.println("Dourada");
-				break;
-			case 2:
-			System.out.println("Laranja");
-				break;
-			case 3:
-			System.out.println("Jade");
-				break;
-			case 4:
-			System.out.println("Verde");
-				break;
-			case 5:
-			System.out.println("Roxa");
-				break;
-			case 6:
-			System.out.println("Azul");
-				break;
-			case 7:
-			System.out.println("Vermelha");
-				break;
-			case 8:
-			System.out.println("Marrom Clara");
-				break;
-			case 9:
-			System.out.println("Marrom");
-				break;
-			case 10:
-			System.out.println("Preta");
-				break;
-		}
+		System.out.printf("Faixa: %s", get_faixa());
 		System.out.printf("Período: %s\n", get_periodo() == 1 ? "matutino" : get_periodo() == 2 ? "vespertino" : "noturno");
 		System.out.printf("Armas: %s\n", get_arma() ? "sim" : "não");
 		System.out.println();
 	}
 
 	public String toString(){
-		return String.format("%s - %s ", get_codigo(), get_periodo() == 1 ? "matutino" : get_periodo() == 2 ? "vespertino" : "noturno");
+		return String.format("%s - %s ", get_codigo(), get_faixa());
 	}
 }
 
