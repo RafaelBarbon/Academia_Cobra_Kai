@@ -3,7 +3,7 @@
 // Rafael Silva Barbon			19243633
 
 import java.util.*;
-import java.time.*;
+//import java.time.*;
 public class menu{
 	static Scanner input = new Scanner(System.in);
 	public static void main(String[] args){
@@ -21,9 +21,9 @@ public class menu{
 		String horaFormatada = formatterHora.format(agora);
 		*/
 
-		int menu_option = 0, submenu_option = 0, sub_inter_menuoption = 0, contador_codigo_aluno = 0, contador_codigo_professor = 0, contador_codigo_aula = 0,forma_pag = 1, faixa = 1, periodo = 1;
-		boolean error = false, encontrou = false, invalido = false, armas = true;
-		String procurar = "", nome = "", CPF = "", email = "", telefone = "",codigo = "", senha = "",senhaMestre = "admin", vincular = "", confirmaSenha = "";
+		int menu_option = 0, submenu_option = 0, sub_inter_menuoption = 0, contador_codigo_aluno = 0, contador_codigo_professor = 0, contador_codigo_aula = 0, faixa = 1;
+		boolean error = false, encontrou = false, invalido = false, armas = true, valido = true;
+		String procurar = "", nome = "", CPF = "", email = "", telefone = "",codigo = "", senha = "",senhaMestre = "admin", vincular = "", confirmaSenha = "", horario = "";
 		aluno aluno_auxiliar = null;
 		professor professor_auxiliar = null;
 		aula aula_auxiliar = null;
@@ -32,6 +32,7 @@ public class menu{
         LinkedList <aluno> alunos = new LinkedList<aluno>();
 		LinkedList <professor> professores = new LinkedList<professor>();
 		LinkedList <aula> aulas = new LinkedList<aula>();
+		clear();
 		do{
 			do{
 				try{
@@ -40,10 +41,10 @@ public class menu{
 					System.out.println("0 - Sair.");
 					System.out.println("1 - Cadastro."); // Cadastrar alunos, professores ou aulas
 					System.out.println("2 - Remoção."); // Remover alunos, professores ou aulas
-					System.out.println("3 - (Des)Vincular"); // (Des)Vincula Aula com aluno
+					System.out.println("3 - Vínculos."); // (Des)Vincula Aula com aluno
 					System.out.println("4 - Consulta."); // Consultar alunos, professores ou aulas
-					System.out.println("5 - Atualizar dados");
-					System.out.println("6 - Entrada"); // "Catraca"
+					System.out.println("5 - Atualizar dados.");
+					System.out.println("6 - Entrada."); // "Catraca"
 					System.out.println("7 - Sincronizar contas com o banco e enviar arquivos por email.");
 					System.out.print("-> ");
 					menu_option = input.nextInt();
@@ -60,22 +61,22 @@ public class menu{
 					do{
 						try{
 							error = false;
-							System.out.println("0 - Menu principal");
-							System.out.println("1 - Cadastro Aluno");
+							System.out.println("0 - Menu principal.");
+							System.out.println("1 - Cadastro Aluno.");
 							/*
 							coleta nome, CPF, email, telefone, data de nascimento e forma de pagamento
 							verifica se existe conflito de CPF
 							gera um número de codigo
 							*/
-							System.out.println("2 - Cadastro Professor");
+							System.out.println("2 - Cadastro Professor.");
 							/*
 							coleta nome, CPF, email, telefone e data de nascimento
 							verifica se existe conflito de CPF
 							gera um número de codigo
 							*/
-							System.out.println("3 - Cadastro Aula");
+							System.out.println("3 - Cadastro Aula.");
 							/*
-							coleta período, faixa e arma
+							coleta Horário, faixa e arma
 							*/
 							System.out.print("->");
 							submenu_option = input.nextInt();
@@ -116,12 +117,10 @@ public class menu{
 									}
 								}
 							}while(invalido);
-							forma_pag = insereFormaPagamento();
 							contador_codigo_aluno++;
-							aluno_auxiliar = new aluno(nome,CPF,email,telefone,"A"+Integer.toString(contador_codigo_aluno),forma_pag,data,senha);
+							aluno_auxiliar = new aluno(nome,CPF,email,telefone,"A"+Integer.toString(contador_codigo_aluno),data,senha);
 							alunos.add(aluno_auxiliar);
-							System.out.println("Aluno cadastrado com sucesso. Pressione ENTER para continuar.");
-							input.nextLine();
+							System.out.printf("Aluno cadastrado com sucesso. Código: %s. Pressione ENTER para continuar.",aluno_auxiliar.get_codigo());
 							break;
 // ****************************************************************************************************
 						case 2: // Professor
@@ -139,18 +138,18 @@ public class menu{
 							contador_codigo_professor++;
 							professor_auxiliar = new professor(nome,CPF,email,telefone,"P"+Integer.toString(contador_codigo_professor),data,senha);
 							professores.add(professor_auxiliar);
-							System.out.println("Professor cadastrado com sucesso. Pressione ENTER para continuar.");
+							System.out.printf("Professor cadastrado com sucesso. Código: %s . Pressione ENTER para continuar.",professor_auxiliar.get_codigo());
 							break;
 // ****************************************************************************************************
 						case 3: // Aulas
-							periodo = inserePeriodo();
+							horario = insereHorario();
 							error = true;
 							faixa = insereFaixa();
 							armas = insereArmas();
 							contador_codigo_aula++;
-							aula_auxiliar = new aula(faixa, armas, periodo, "C"+Integer.toString(contador_codigo_aula));
+							aula_auxiliar = new aula(faixa, armas, horario, "C"+Integer.toString(contador_codigo_aula));
 							aulas.add(aula_auxiliar);
-							System.out.println("Aula cadastrada com sucesso. Pressione ENTER para continuar.");
+							System.out.printf("Aula cadastrada com sucesso. Código: %s. Pressione ENTER para continuar.",aula_auxiliar.get_codigo());
 							input.nextLine();
 							break;
 					}
@@ -167,10 +166,10 @@ public class menu{
 					do{
 						try{
 							error = false;
-							System.out.println("0 - Menu principal");
-							System.out.println("1 - Remoção Aluno");
-							System.out.println("2 - Remoção Professor");
-							System.out.println("3 - Remoção Aula");
+							System.out.println("0 - Menu principal.");
+							System.out.println("1 - Remoção Aluno.");
+							System.out.println("2 - Remoção Professor.");
+							System.out.println("3 - Remoção Aula.");
 							System.out.print("->");
 							submenu_option = input.nextInt();
 						}
@@ -199,7 +198,7 @@ public class menu{
 									encontrou = true;
 									if(senha.equals(al.get_senha()) || senha.equals(senhaMestre)){
 										alunos.remove(al);
-										System.out.println("Aluno removido com sucesso");
+										System.out.println("Aluno removido com sucesso.");
 									}
 									else{
 										System.out.println("Senha incorreta.");
@@ -208,7 +207,7 @@ public class menu{
 								}
 							}
 							if(!encontrou){
-								System.out.println("Aluno inexistente no sistema");
+								System.out.println("Aluno inexistente no sistema.");
 							}
 							break;
 // ****************************************************************************************************
@@ -229,7 +228,7 @@ public class menu{
 									encontrou = true;
 									if(senha.equals(pr.get_senha()) || senha.equals(senhaMestre)){
 										professores.remove(pr);
-										System.out.println("Professor removido com sucesso");
+										System.out.println("Professor removido com sucesso.");
 									}
 									else{
 										System.out.println("Senha incorreta.");
@@ -238,7 +237,7 @@ public class menu{
 								}
 							}
 							if(!encontrou){
-								System.out.println("Professor inexistente no sistema");
+								System.out.println("Professor inexistente no sistema.");
 							}
 							break;
 // ****************************************************************************************************
@@ -257,39 +256,39 @@ public class menu{
 								if(procurar.equals(au.get_codigo())){
 									for(aluno a : alunos){
 										a.del_aula(au);
+										a.set_valor(valor_aulas(a.get_aulas()));
 									}
 									aulas.remove(au);
-									System.out.println("Aula removida com sucesso");
+									System.out.println("Aula removida com sucesso.");
 									encontrou = true;
 									break;
 								}
 							}
 							if(!encontrou){
-								System.out.println("Aula inexistente no sistema");
+								System.out.println("Aula inexistente no sistema.");
 							}
 							break;
 					}
-					try{
-						Thread.sleep(2000);
-					}
-					catch(InterruptedException e){}
+					esperar(2000);
 					clear();
 					break;
 // ****************************************************************************************************
 				case 3:
 					if(alunos.size() == 0){
-						System.out.println("Não há alunos cadastrados no sistema");
+						System.out.println("Não há alunos cadastrados no sistema.");
+						esperar(2000);
 					}
 					else if(aulas.size() == 0){
-						System.out.println("Não há aulas cadastradas no sistema");
+						System.out.println("Não há aulas cadastradas no sistema.");
+						esperar(2000);
 					}
 					else{
 						do{
 							try{
 								error = false;
-								System.out.println("0 - Menu principal");
-								System.out.println("1 - Vincular aula a um aluno");
-								System.out.println("2 - Desvincular aula de um aluno");
+								System.out.println("0 - Menu principal.");
+								System.out.println("1 - Vincular aula a um aluno.");
+								System.out.println("2 - Desvincular aula de um aluno.");
 								System.out.print("->");
 								submenu_option = input.nextInt();
 							}
@@ -322,18 +321,24 @@ public class menu{
 									encontrou = false;
 									System.out.println("Selecione o aluno a ser vinculado:");
 									exibir(alunos);
-									System.out.print("->");
+									System.out.print("\n->");
 									vincular = input.nextLine();
 									vincular = vincular.toUpperCase();
 									for(aluno a : alunos){
 										if(vincular.equals(a.get_codigo())){
-											a.add_aula(aula_auxiliar);
+											valido = a.add_aula(aula_auxiliar);
+											a.set_valor(valor_aulas(a.get_aulas()));
 											encontrou = true;
 											break;
 										}
 									}
 									if(encontrou){
-										System.out.println("\nAula vinculada do aluno.");
+										if(valido){
+											System.out.println("\nAula vinculada do aluno.");
+										}
+										else{
+											System.out.println("\nAluno possui faixa discrepante com o nível da aula.");
+										}
 									}
 									else{
 										System.out.println("Aluno inexistente no sistema.");
@@ -358,6 +363,7 @@ public class menu{
 									System.out.println("Selecione a aula a ser desvinculada:");
 									exibir(aulas);
 									System.out.println("->");
+									input.nextLine();
 									codigo = input.nextLine();
 									codigo = codigo.toUpperCase();
 									for(aula au : aulas){
@@ -372,13 +378,13 @@ public class menu{
 									encontrou = false;
 									System.out.println("Selecione o aluno a ser desvinculado:");
 									exibir(alunos);
-									System.out.print("->");
-									input.nextLine();
+									System.out.print("\n->");
 									vincular = input.nextLine();
 									vincular = vincular.toUpperCase();
 									for(aluno a : alunos){
 										if(vincular.equals(a.get_codigo())){
 											a.del_aula(aula_auxiliar);
+											a.set_valor(valor_aulas(a.get_aulas()));
 											encontrou = true;
 											break;
 										}
@@ -417,10 +423,10 @@ public class menu{
 					do{
 						try{
 							error = false;
-							System.out.println("0 - Menu principal");
-							System.out.println("1 - Consulta Aluno");
-							System.out.println("2 - Consulta Professor");
-							System.out.println("3 - Consulta Aula");
+							System.out.println("0 - Menu principal.");
+							System.out.println("1 - Consulta Aluno.");
+							System.out.println("2 - Consulta Professor.");
+							System.out.println("3 - Consulta Aula.");
 							System.out.print("->");
 							submenu_option = input.nextInt();
 						}
@@ -565,10 +571,10 @@ public class menu{
 					do{
 						try{
 							error = false;
-							System.out.println("0 - Menu principal");
-							System.out.println("1 - Atualizar dados do Aluno");
-							System.out.println("2 - Atualizar dados do Professor");
-							System.out.println("3 - Atualizar dados da Aula");
+							System.out.println("0 - Menu principal.");
+							System.out.println("1 - Atualizar dados do Aluno.");
+							System.out.println("2 - Atualizar dados do Professor.");
+							System.out.println("3 - Atualizar dados da Aula.");
 							System.out.print("->");
 							submenu_option = input.nextInt();
 						}
@@ -601,15 +607,14 @@ public class menu{
 										do{
 											try{
 												error = false;
-												System.out.println("1 - Nome");
-												System.out.println("2 - CPF");
-												System.out.println("3 - Email");
-												System.out.println("4 - Telefone");
-												System.out.println("5 - Data de Nascimento");
-												System.out.println("6 - Forma de Pagamento");
-												System.out.println("7 - Auxiliar");
-												System.out.println("8 - Faixa");
-												System.out.println("9 - Senha");
+												System.out.println("1 - Nome.");
+												System.out.println("2 - CPF.");
+												System.out.println("3 - Email.");
+												System.out.println("4 - Telefone.");
+												System.out.println("5 - Data de Nascimento.");
+												System.out.println("6 - Auxiliar.");
+												System.out.println("7 - Faixa.");
+												System.out.println("8 - Senha.");
 												System.out.print("->");
 												sub_inter_menuoption = input.nextInt();
 											}
@@ -618,7 +623,7 @@ public class menu{
 												System.out.println("Insira um número inteiro dentro do intervalo do menu para prosseguir. Pressione qualquer tecla para continuar.");
 												input.nextLine();
 											}
-										}while(error || menu_option > 9 || menu_option < 1);
+										}while(error || menu_option > 8 || menu_option < 1);
 										switch(sub_inter_menuoption){
 											case 1:
 												al.set_nome(insereNome());
@@ -647,23 +652,20 @@ public class menu{
 												al.set_nascimento(insereData());
 												break;
 											case 6:
-												al.set_forma_pagamento(insereFormaPagamento());
-												break;
-											case 7:
 												al.set_auxiliar(insereAuxiliar());
 												break;
-											case 8:
+											case 7:
 												al.set_faixa(insereFaixa());
 												break;
-											case 9:
-											do{
-												input.nextLine();
-												vincular = insereSenha(false);
-												confirmaSenha = insereSenha(true);
-												if(!vincular.equals(confirmaSenha)){
-													System.out.println("Senhas distintas! Tente novamente.");
-												}
-											}while(!vincular.equals(confirmaSenha));
+											case 8:
+												do{
+													input.nextLine();
+													vincular = insereSenha(false);
+													confirmaSenha = insereSenha(true);
+													if(!vincular.equals(confirmaSenha)){
+														System.out.println("Senhas distintas! Tente novamente.");
+													}
+												}while(!vincular.equals(confirmaSenha));
 												al.set_senha(senha,vincular,senhaMestre);
 												break;
 										}
@@ -704,12 +706,12 @@ public class menu{
 										do{
 											try{
 												error = false;
-												System.out.println("1 - Nome");
-												System.out.println("2 - CPF");
-												System.out.println("3 - Email");
-												System.out.println("4 - Telefone");
-												System.out.println("5 - Data de Nascimento");
-												System.out.println("6 - Senha");
+												System.out.println("1 - Nome.");
+												System.out.println("2 - CPF.");
+												System.out.println("3 - Email.");
+												System.out.println("4 - Telefone.");
+												System.out.println("5 - Data de Nascimento.");
+												System.out.println("6 - Senha.");
 												System.out.print("->");
 												sub_inter_menuoption = input.nextInt();
 											}
@@ -793,9 +795,9 @@ public class menu{
 									do{
 										try{
 											error = false;
-											System.out.println("1 - Armas");
-											System.out.println("2 - Faixa");
-											System.out.println("3 - Período");
+											System.out.println("1 - Armas.");
+											System.out.println("2 - Faixa.");
+											System.out.println("3 - Horário.");
 											System.out.print("->");
 											sub_inter_menuoption = input.nextInt();
 										}
@@ -810,7 +812,7 @@ public class menu{
 											au.set_arma(insereArmas());
 											break;
 										case 2:
-											au.set_periodo(inserePeriodo());
+											au.set_horario(insereHorario());
 											break;
 										case 3:
 											au.set_faixa(insereFaixa());
@@ -842,7 +844,7 @@ public class menu{
 						System.out.println("Cadastros inexistentes.");
 					}
 					else{
-						System.out.print("Insira a código do aluno/professor que deseja entrar\n->");
+						System.out.print("Insira a código do aluno/professor que deseja entrar.\n->");
 						input.nextLine();
 						codigo = input.nextLine();
 						encontrou = false;
@@ -869,8 +871,8 @@ public class menu{
 							for(professor pr : professores){
 								if(pr.get_codigo().equals(codigo)){
 									encontrou = true;
-									System.out.printf("Aula incrementada, %s", pr.get_nome());
-									pr.IncrementaAula();
+									//System.out.printf("Aula incrementada, %s", pr.get_nome());
+									//pr.IncrementaAula();
 								}
 							}
 							if(!encontrou){
@@ -881,10 +883,7 @@ public class menu{
 							System.out.println("Pessoa inexistente no sistema.");
 						}
 					}
-					try{
-						Thread.sleep(2000);
-					}
-					catch(InterruptedException e){}
+					esperar(2000);
 					clear();
 					break;
 // ****************************************************************************************************
@@ -892,10 +891,7 @@ public class menu{
 					break;
 				default: // Sair do sistema
 					System.out.println("Obrigado por utilizar o sistema desenvolvido por RAH - Desenvolvimento de Sistemas.");
-					try{
-						Thread.sleep(5000);
-					}
-					catch(InterruptedException e){}
+					esperar(5000);
 					clear();
 			}
 		}while(menu_option != 0);
@@ -917,6 +913,7 @@ public class menu{
 		}
 	}
 
+	// Método que coleta o nome
 	public static String insereNome(){
 		String nome;
 		System.out.print("Nome ->");
@@ -926,6 +923,7 @@ public class menu{
 		return nome;
 	}
 
+	// Método que coleta senha (ou confirmação de senha)
 	public static String insereSenha(boolean confirma){
 		String senha;
 		if(confirma){
@@ -957,6 +955,7 @@ public class menu{
 		return CPF.substring(0,3) + '.' + CPF.substring(3,6) + '.' + CPF.substring(6,9) + '-' + CPF.substring(9);
 	}
 
+	// Método que coleta o email
 	public static String insereEmail(){
 		boolean invalido = true;
 		String email;
@@ -1000,6 +999,7 @@ public class menu{
 		return telefone.substring(0,2) + ' ' + telefone.substring(2,7) + '-' + telefone.substring(7);
 	}
 
+	// Método que insere data
 	public static Data insereData(){
 		boolean invalido = true, error;
 		int dia = 0, mes = 0, ano = 0;
@@ -1038,32 +1038,6 @@ public class menu{
 		return data;
 	}
 
-	public static int insereFormaPagamento(){
-		boolean error = true;
-		int forma_pag = 1;
-		do{ //Inserção da forma de pagamento.
-			if(forma_pag > 2 || forma_pag < 1){
-				System.out.println("Insira um número inteiro dentro do intervalo para prosseguir. Pressione qualquer tecla para continuar.");
-				input.nextLine();
-				input.nextLine();
-				clear();
-			}
-			try{
-				error = false;
-				System.out.printf("Forma de pagamento (1-Boleto; 2-Débito Automático) ->");
-				forma_pag = input.nextInt();
-			}
-			catch(InputMismatchException InputMismatchException){
-				error = true;
-				System.out.println("Insira um número inteiro para prosseguir. Pressione qualquer tecla para continuar.");
-				input.nextLine();
-				input.nextLine();
-				clear();
-			}
-		}while(error || forma_pag > 2 || forma_pag < 1);
-		return forma_pag;
-	}
-
 	public static boolean insereAuxiliar(){
 		boolean error = true;
 		int aux = 1;
@@ -1093,32 +1067,6 @@ public class menu{
 		return false;
 	}
 
-	public static int inserePeriodo(){
-		boolean error = true;
-		int periodo = 1;
-		do{ // Inserção do período
-			if(periodo > 3 || periodo < 1){
-				System.out.println("Insira um número inteiro dentro do intervalo para prosseguir. Pressione qualquer tecla para continuar.");
-				input.nextLine();
-				input.nextLine();
-				clear();
-			}
-			try{
-				error = false;
-				System.out.printf("Período (1-Matutino; 2-Vespertino; 3-Noturno) ->");
-				periodo = input.nextInt();
-			}
-			catch(InputMismatchException InputMismatchException){
-				error = true;
-				System.out.println("Insira um número inteiro para prosseguir. Pressione qualquer tecla para continuar.");
-				input.nextLine();
-				input.nextLine();
-				clear();
-			}
-		}while(error || periodo > 3 || periodo < 1);
-		return periodo;
-	}
-
 	public static int insereFaixa(){
 		int faixa = 0;
 		boolean error = true;
@@ -1132,17 +1080,17 @@ public class menu{
 			try{
 				error = false;
 				System.out.println("Faixa:");
-				System.out.println("\t0 - Amerela");
-				System.out.println("\t1 - Dourada");
-				System.out.println("\t2 - Laranja");
-				System.out.println("\t3 - Jade");
-				System.out.println("\t4 - Verde");
-				System.out.println("\t5 - Roxa");
-				System.out.println("\t6 - Azul");
-				System.out.println("\t7 - Vermelha");
-				System.out.println("\t8 - Marrom Claro");
-				System.out.println("\t9 - Marrom");
-				System.out.println("\t10 - Preta");
+				System.out.println("\t0 - Amerela.");
+				System.out.println("\t1 - Dourada.");
+				System.out.println("\t2 - Laranja.");
+				System.out.println("\t3 - Jade.");
+				System.out.println("\t4 - Verde.");
+				System.out.println("\t5 - Roxa.");
+				System.out.println("\t6 - Azul.");
+				System.out.println("\t7 - Vermelha.");
+				System.out.println("\t8 - Marrom Claro.");
+				System.out.println("\t9 - Marrom.");
+				System.out.println("\t10 - Preta.");
 				System.out.print("->");
 				faixa = input.nextInt();
 			}
@@ -1186,10 +1134,108 @@ public class menu{
 		return false;
 	}
 
+	public static String insereHorario(){
+		int dia = 1, hora = 1;
+		boolean error;
+		do{ // Inserção do dia da semana
+			if(dia > 6 || dia < 1){
+				System.out.println("Insira um número inteiro dentro do intervalo para prosseguir. Pressione qualquer tecla para continuar.");
+				input.nextLine();
+				input.nextLine();
+				clear();
+			}
+			try{
+				error = false;
+				System.out.println("Dia da semana:");
+				System.out.println("\t1 - Segunda-feira.");
+				System.out.println("\t2 - Terça-feira.");
+				System.out.println("\t3 - Quarta-feira.");
+				System.out.println("\t4 - Quinta-feira.");
+				System.out.println("\t5 - Sexta-feira.");
+				System.out.println("\t6 - Sábado.");
+				System.out.print("->");
+				dia = input.nextInt();
+			}
+			catch(InputMismatchException InputMismatchException){
+				error = true;
+				System.out.println("Insira um número inteiro para prosseguir. Pressione qualquer tecla para continuar.");
+				input.nextLine();
+				input.nextLine();
+				clear();
+			}
+		}while(error || dia > 6 || dia < 1);
+		do{ // Inserção do horário
+			if(hora < 1 || (hora > 15 && dia != 6) || (hora > 11 && dia == 6)){
+				System.out.println("Insira um número inteiro dentro do intervalo para prosseguir. Pressione qualquer tecla para continuar.");
+				input.nextLine();
+				input.nextLine();
+				clear();
+			}
+			try{
+				error = false;
+				System.out.println("Horário:");
+				System.out.println("\t1 - 7:00.");
+				System.out.println("\t2 - 8:00.");
+				System.out.println("\t3 - 9:00.");
+				System.out.println("\t4 - 10:00.");
+				System.out.println("\t5 - 11:00.");
+				System.out.println("\t6 - 12:00.");
+				System.out.println("\t7 - 13:00.");
+				System.out.println("\t8 - 14:00.");
+				System.out.println("\t9 - 15:00.");
+				System.out.println("\t10 - 16:00.");
+				System.out.println("\t11 - 17:00.");
+				if(dia != 6){
+					System.out.println("\t12 - 18:00.");
+					System.out.println("\t13 - 19:00.");
+					System.out.println("\t14 - 20:00.");
+					System.out.println("\t15 - 21:00.");
+				}
+				System.out.print("->");
+				hora = input.nextInt();
+			}
+			catch(InputMismatchException InputMismatchException){
+				error = true;
+				System.out.println("Insira um número inteiro para prosseguir. Pressione qualquer tecla para continuar.");
+				input.nextLine();
+				input.nextLine();
+				clear();
+			}
+		}while(error || hora < 1 || (hora > 15 && dia != 6) || (hora > 11 && dia == 6));
+		hora += 6;
+		switch(dia){
+			case 1:	return "Segunda-feira " + Integer.toString(hora) + ":00";
+			case 2:	return "Terça-feira " + Integer.toString(hora) + ":00";
+			case 3:	return "Quarta-feira " + Integer.toString(hora) + ":00";
+			case 4:	return "Quinta-feira " + Integer.toString(hora) + ":00";
+			case 5:	return "Sexta-feira " + Integer.toString(hora) + ":00";
+			case 6:	return "Sábado " + Integer.toString(hora) + ":00";
+			default: return "";
+		}
+	}
+
+	// Atribui o valor a ser pago semanalmente a partir do número de aulas da semana
+	public static float valor_aulas(int aulas){
+		switch(aulas){
+			case 0: return 0;
+			case 1:	return (float)100.0;
+			case 2:	return (float)170.0;
+			case 3: return (float)200.0;
+			default: return (float)250.0;
+		}
+	}
+
 	// Método que lista os nomes e codigos para a consulta
 	public static <T> void exibir(LinkedList <T> lista){
 		for(T aux : lista){
 			System.out.printf("\t%s", aux);
 		}
+	}
+
+	public static void esperar(int tempo){
+		try{
+			Thread.sleep(tempo);
+		}
+		catch(InterruptedException e){}
 	}
 }

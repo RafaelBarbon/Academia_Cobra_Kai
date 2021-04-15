@@ -7,18 +7,17 @@ import java.util.*;
 public class aluno extends Info{
     private float valor; // DEFINIR valor DO ALUNO AO CADASTRAR EM UMA AULA
 	private boolean mes_pago, auxiliar;
-    private int atraso_conta, forma_pagamento, faixa;
+    private int atraso_conta, faixa;
 	private LinkedList <aula> aulas_matriculadas = new LinkedList<aula>();
 
     //Construtores
-	public aluno(String nome, String CPF, String email, String telefone, String codigo, int forma_pagamento, Data nascimento, String senha){
+	public aluno(String nome, String CPF, String email, String telefone, String codigo, Data nascimento, String senha){
 		super.nome = nome;
         super.CPF = CPF;
         super.email = email;
         super.telefone = telefone;
 		this.atraso_conta = 0;
 		super.codigo = codigo;
-		this.forma_pagamento = forma_pagamento;
 		this.mes_pago = true;
 		this.valor = 0;
 		super.nascimento = nascimento;
@@ -86,14 +85,6 @@ public class aluno extends Info{
 		return this.atraso_conta;
 	}
 
-	public void set_forma_pagamento(int forma_pagamento){
-		this.forma_pagamento = forma_pagamento;
-	}
-
-	public int get_forma_pagamento(){
-		return this.forma_pagamento;
-	}
-
 	public boolean get_mes_pago(){
 		return this.mes_pago;
 	}
@@ -140,7 +131,9 @@ public class aluno extends Info{
 		for(aula d : aulas_matriculadas){
 			if(d.get_codigo() == a.get_codigo()){
 				aulas_matriculadas.remove(d);
-				aulas_matriculadas.add(a);
+				if(a.get_faixaN() == faixa || a.get_faixaN()+1 == faixa || a.get_faixaN()-1 == faixa){
+					aulas_matriculadas.add(a);
+				}
 				break;
 			}
 		}
@@ -153,9 +146,7 @@ public class aluno extends Info{
 	// Método que atribui atraso da conta de um cliente
 	public void atraso(int meses){
 		this.atraso_conta += meses;
-		if(this.atraso_conta > 1){
-			this.mes_pago = false;
-		}
+		this.mes_pago = false;
 	}
 
 	// Método que torna a situação financeira de um cliente como pago
@@ -175,16 +166,16 @@ public class aluno extends Info{
 		System.out.printf("Email: %s\n", get_email());
 		System.out.printf("Telefone: %s\n", get_telefone());
 		System.out.printf("Número codigo: %s\n", get_codigo());
-		System.out.printf("Faixa: %s", get_faixa());
+		System.out.printf("Faixa: %s\n", get_faixa());
 		System.out.printf("Auxiliar: %s\n", get_auxiliar() ? "sim" : "não");
+		System.out.printf("Quantidade de aulas na semana: %d\n", get_aulas());
 		System.out.printf("Valor semanal de aulas: %.2f\n", get_valor());
-		System.out.printf("Forma de Pagamento: %s\n", get_forma_pagamento() == 1 ? "boleto bancário" : "débito automático");
 		System.out.printf("Situação: ");
 		if(get_mes_pago()){
-			System.out.println("em dia");
+			System.out.println("Em dia");
 		}
 		else{
-			System.out.printf("atrasado %d meses\n", get_atraso_conta());
+			System.out.printf("Atrasado %d m%s\n", get_atraso_conta(), get_atraso_conta() > 1 ? "eses" : "ês");
 		}
 		System.out.println();
 		exibe_aulas();
