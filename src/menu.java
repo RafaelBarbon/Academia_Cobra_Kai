@@ -2,25 +2,15 @@
 // Henrique Sartori Siqueira	19240472
 // Rafael Silva Barbon			19243633
 
+import java.time.format.DateTimeFormatter;
 import java.util.*;
-//import java.time.*;
+import java.time.*;
+
+//import java.time.LocalDateTime;
+//import  java.time.format.DateTimeFormatter;
 public class menu{
 	static Scanner input = new Scanner(System.in);
 	public static void main(String[] args){
-		/*
-		//Coleta hora e data
-		// data/hora atual
-		LocalDateTime agora = LocalDateTime.now();
-
-		// formatar a data
-		DateTimeFormatter formatterData = DateTimeFormatter.ofPattern("dd/MM/uuuu");
-		String dataFormatada = formatterData.format(agora);
-
-		// formatar a hora
-		DateTimeFormatter formatterHora = DateTimeFormatter.ofPattern("HH:mm:ss");
-		String horaFormatada = formatterHora.format(agora);
-		*/
-
 		int menu_option = 0, submenu_option = 0, sub_inter_menuoption = 0, contador_codigo_aluno = 0, contador_codigo_professor = 0, contador_codigo_aula = 0, faixa = 1;
 		boolean error = false, encontrou = false, invalido = false, armas = true, valido = true;
 		String procurar = "", nome = "", CPF = "", email = "", telefone = "",codigo = "", senha = "",senhaMestre = "admin", vincular = "", confirmaSenha = "", horario = "";
@@ -45,7 +35,8 @@ public class menu{
 					System.out.println("4 - Consulta."); // Consultar alunos, professores ou aulas
 					System.out.println("5 - Atualizar dados.");
 					System.out.println("6 - Entrada."); // "Catraca"
-					System.out.println("7 - Sincronizar contas com o banco e enviar arquivos por email.");
+					System.out.println("7 - Sincronizar contas com o banco.");
+					System.out.println("8 - Enviar comprovantes para os professores.");
 					System.out.print("-> ");
 					menu_option = input.nextInt();
 				}
@@ -54,7 +45,7 @@ public class menu{
 					System.out.println("Insira um número inteiro dentro do intervalo do menu para prosseguir. Pressione qualquer tecla para continuar.");
 					input.nextLine();
 				}
-			}while(error || menu_option > 6 || menu_option < 0);
+			}while(error || menu_option > 8 || menu_option < 0);
 			clear();
 			switch(menu_option){
 				case 1: // Cadastro
@@ -871,8 +862,13 @@ public class menu{
 							for(professor pr : professores){
 								if(pr.get_codigo().equals(codigo)){
 									encontrou = true;
-									//System.out.printf("Aula incrementada, %s", pr.get_nome());
-									//pr.IncrementaAula();
+									LocalDateTime agora = LocalDateTime.now();
+
+									// formatar a data e hora
+									DateTimeFormatter formatterData = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+									String dataFormatada = formatterData.format(agora);
+									pr.registra_acesso(dataFormatada);
+									System.out.printf("Acesso registrado, %s", pr.get_nome());
 								}
 							}
 							if(!encontrou){
@@ -888,6 +884,24 @@ public class menu{
 					break;
 // ****************************************************************************************************
 				case 7: ///PARTE DO EMAIL
+					break;
+				case 8:///Envio de comprovante para professores
+					if(professores.size() == 0){
+						System.out.println("Não há professores cadastrados.");
+					}
+					else{
+						System.out.print("Insira senha Master ->");
+						input.nextLine();
+						senha = input.nextLine();
+						if(senha.equals(senhaMestre)){
+							for(professor pf : professores){
+								pf.renova_mes();
+							}
+						}
+						System.out.print("Comprovantes enviados por email a todos os professores.");
+					}
+					esperar(2000);
+					clear();
 					break;
 				default: // Sair do sistema
 					System.out.println("Obrigado por utilizar o sistema desenvolvido por RAH - Desenvolvimento de Sistemas.");

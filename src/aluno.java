@@ -131,7 +131,7 @@ public class aluno extends Info{
 		for(aula d : aulas_matriculadas){
 			if(d.get_codigo() == a.get_codigo()){
 				aulas_matriculadas.remove(d);
-				if(a.get_faixaN() == faixa || a.get_faixaN()+1 == faixa || a.get_faixaN()-1 == faixa){
+				if(a.get_faixaN() == faixa || a.get_faixaN() + 1 == faixa || a.get_faixaN() - 1 == faixa){
 					aulas_matriculadas.add(a);
 				}
 				break;
@@ -146,7 +146,9 @@ public class aluno extends Info{
 	// Método que atribui atraso da conta de um cliente
 	public void atraso(int meses){
 		this.atraso_conta += meses;
-		this.mes_pago = false;
+		if(this.atraso_conta > 1){
+			this.mes_pago = false;
+		}
 	}
 
 	// Método que torna a situação financeira de um cliente como pago
@@ -175,7 +177,7 @@ public class aluno extends Info{
 			System.out.println("Em dia");
 		}
 		else{
-			System.out.printf("Atrasado %d m%s\n", get_atraso_conta(), get_atraso_conta() > 1 ? "eses" : "ês");
+			System.out.printf("Atrasado %d meses\n", get_atraso_conta());
 		}
 		System.out.println();
 		exibe_aulas();
