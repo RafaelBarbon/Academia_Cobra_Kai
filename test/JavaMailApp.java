@@ -1,5 +1,6 @@
 import java.util.*;
 import javax.mail.*;
+import javax.mail.internet.*;
 
 
 public class JavaMailApp{
@@ -30,7 +31,7 @@ public class JavaMailApp{
 			Address[] toUser = InternetAddress.parse("rsb1@outlook.com.br"); // Destinatário(s)
 
 			messagem.setRecipients(Message.RecipientType.TO, toUser);
-			messagem.setSubject("Enviando email com JavaMail"); //Assunto
+			messagem.setSubject("Enviando email com JavaMail para o Fael"); //Assunto
 			messagem.setText("Enviei este email utilizando JavaMail com minha conta GMail, para te chamar de babaca! :)");
 			// Método para enviar a mensagem criada
 			Transport.send(messagem);

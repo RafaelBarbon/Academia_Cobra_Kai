@@ -10,8 +10,11 @@
 /// http://www.jmssolucoes.com.br/boleto-bradesco.aspx
 
 import java.util.*;
+import javax.mail.*;
+import javax.mail.internet.*;
+import javax.activation.*;
 
-public class menu{
+public class email{
 	public static void main(String[] args){
 		HtmlEmail email = new HtmlEmail();
 		email.setSSLOnConnect(true); // True se existir conexão SSL

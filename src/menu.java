@@ -6,8 +6,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.time.*;
 
-//import java.time.LocalDateTime;
-//import  java.time.format.DateTimeFormatter;
 public class menu{
 	static Scanner input = new Scanner(System.in);
 	public static void main(String[] args){
@@ -883,14 +881,14 @@ public class menu{
 					clear();
 					break;
 // ****************************************************************************************************
-				case 7: ///PARTE DO EMAIL
+				case 7: ///PARTE DO banco
 					break;
 				case 8:///Envio de comprovante para professores
 					if(professores.size() == 0){
 						System.out.println("Não há professores cadastrados.");
 					}
 					else{
-						System.out.print("Insira senha Master ->");
+						System.out.print("Insira senha mestre ->");
 						input.nextLine();
 						senha = input.nextLine();
 						if(senha.equals(senhaMestre)){
