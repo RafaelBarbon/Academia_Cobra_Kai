@@ -5,13 +5,16 @@
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.time.*;
+import javax.swing.*;
 
 public class menu{
 	static Scanner input = new Scanner(System.in);
+	static ImageIcon logo = new ImageIcon("logo.jpg");
+	static final String empresa = "Academia Cobra Kai";
 	public static void main(String[] args){
 		int menu_option = 0, submenu_option = 0, sub_inter_menuoption = 0, contador_codigo_aluno = 0, contador_codigo_professor = 0, contador_codigo_aula = 0, faixa = 1;
 		boolean error = false, encontrou = false, invalido = false, armas = true, valido = true;
-		String procurar = "", nome = "", CPF = "", email = "", telefone = "",codigo = "", senha = "",senhaMestre = "admin", vincular = "", confirmaSenha = "", horario = "";
+		String procurar = "", nome = "", CPF = "", email = "", telefone = "",codigo = "", senha = "",senhaMestre = "admin", vincular = "", confirmaSenha = "", horario = "", auxiliar = "";
 		aluno aluno_auxiliar = null;
 		professor professor_auxiliar = null;
 		aula aula_auxiliar = null;
@@ -25,6 +28,7 @@ public class menu{
 			do{
 				try{
 					error = false;
+					/*
 					System.out.println("---MENU---\n");
 					System.out.println("0 - Sair.");
 					System.out.println("1 - Cadastro."); // Cadastrar alunos, professores ou aulas
@@ -37,11 +41,20 @@ public class menu{
 					System.out.println("8 - Enviar comprovantes para os professores.");
 					System.out.print("-> ");
 					menu_option = input.nextInt();
+					*/
+					auxiliar = (String)JOptionPane.showInputDialog(null, "0 - Sair.\n1 - Cadastro.\n2 - Remoção.\n3 - Vínculos\n4 - Consulta.\n5 - Atualizar Dados.\n6 - Entrada.\n7 - Sincronizar contas com o banco.\n8 - Enviar comprovante para os professores", empresa, JOptionPane.QUESTION_MESSAGE, logo, null, "");
+					if(auxiliar == null){
+						auxiliar = "0";
+					}
+					menu_option = Integer.parseInt(auxiliar);
 				}
-				catch(InputMismatchException InputMismatchException){
-					error = true;
+				/*catch(InputMismatchException InputMismatchException){
 					System.out.println("Insira um número inteiro dentro do intervalo do menu para prosseguir. Pressione qualquer tecla para continuar.");
 					input.nextLine();
+					*/
+				catch(NumberFormatException e){
+					error = true;
+					JOptionPane.showMessageDialog(null, "Insira um número inteiro dentro do intervalo do menu para prosseguir.",empresa,JOptionPane.ERROR_MESSAGE);
 				}
 			}while(error || menu_option > 8 || menu_option < 0);
 			clear();
@@ -50,30 +63,34 @@ public class menu{
 					do{
 						try{
 							error = false;
-							System.out.println("0 - Menu principal.");
-							System.out.println("1 - Cadastro Aluno.");
+							submenu_option = Integer.parseInt((String)JOptionPane.showInputDialog(null, "0 - Menu principal.\n1 - Cadastro Aluno.\n2 - Cadastrar professsores.\n3 - Cadastro Aula", empresa, JOptionPane.QUESTION_MESSAGE, logo, null, ""));
+
+							//System.out.println("0 - Menu principal.");
+							//System.out.println("1 - Cadastro Aluno.");
 							/*
 							coleta nome, CPF, email, telefone, data de nascimento e forma de pagamento
 							verifica se existe conflito de CPF
 							gera um número de codigo
 							*/
-							System.out.println("2 - Cadastro Professor.");
+							//System.out.println("2 - Cadastro Professor.");
 							/*
 							coleta nome, CPF, email, telefone e data de nascimento
 							verifica se existe conflito de CPF
 							gera um número de codigo
 							*/
-							System.out.println("3 - Cadastro Aula.");
+							//System.out.println("3 - Cadastro Aula.");
 							/*
 							coleta Horário, faixa e arma
 							*/
-							System.out.print("->");
-							submenu_option = input.nextInt();
+							//System.out.print("->");
+							//submenu_option = input.nextInt();
 						}
-						catch(InputMismatchException InputMismatchException){
+						//catch(InputMismatchException InputMismatchException){
+						catch(NumberFormatException e){
 							error = true;
-							System.out.println("Insira um número inteiro dentro do intervalo do menu para prosseguir. Pressione qualquer tecla para continuar.");
-							input.nextLine();
+							//System.out.println("Insira um número inteiro dentro do intervalo do menu para prosseguir. Pressione qualquer tecla para continuar.");
+							JOptionPane.showMessageDialog(null, "Insira um número inteiro dentro do intervalo do menu para prosseguir.", empresa, JOptionPane.ERROR_MESSAGE);
+							//input.nextLine();
 						}
 					}while(error || submenu_option > 3 || submenu_option < 0);
 					clear();
@@ -88,7 +105,8 @@ public class menu{
 							senha = insereSenha(false);
 							confirmaSenha = insereSenha(true);
 							if(!senha.equals(confirmaSenha)){
-								System.out.println("Senhas distintas! Tente novamente.");
+								//System.out.println("Senhas distintas! Tente novamente.");
+								JOptionPane.showMessageDialog(null, "Senhas distintas! Tente novamente.", empresa, JOptionPane.ERROR_MESSAGE);
 							}
 						}while(!senha.equals(confirmaSenha));
 					}
@@ -101,7 +119,8 @@ public class menu{
 								for(aluno al : alunos){
 									if(CPF.equals(al.get_CPF())){
 										invalido = true;
-										System.out.println("CPF já existente no sistema, tente novamente.");
+										//System.out.println("CPF já existente no sistema, tente novamente.");
+										JOptionPane.showMessageDialog(null, "CPF já existente no sistema, tente novamente.", empresa, JOptionPane.ERROR_MESSAGE);
 										break;
 									}
 								}
@@ -109,7 +128,7 @@ public class menu{
 							contador_codigo_aluno++;
 							aluno_auxiliar = new aluno(nome,CPF,email,telefone,"A"+Integer.toString(contador_codigo_aluno),data,senha);
 							alunos.add(aluno_auxiliar);
-							System.out.printf("Aluno cadastrado com sucesso. Código: %s. Pressione ENTER para continuar.",aluno_auxiliar.get_codigo());
+							System.out.printf("Aluno cadastrado com sucesso. Código: %s. Pressione ENTER para continuar.",aluno_auxiliar.get_codigo()); // olhar
 							break;
 // ****************************************************************************************************
 						case 2: // Professor
@@ -119,7 +138,8 @@ public class menu{
 								for(professor pr : professores){
 									if(CPF.equals(pr.get_CPF())){
 										invalido = true;
-										System.out.println("CPF já existente no sistema, tente novamente.");
+										//System.out.println("CPF já existente no sistema, tente novamente.");
+										JOptionPane.showMessageDialog(null, "CPF já existente no sistema, tente novamente.", empresa, JOptionPane.ERROR_MESSAGE);
 										break;
 									}
 								}
@@ -127,7 +147,7 @@ public class menu{
 							contador_codigo_professor++;
 							professor_auxiliar = new professor(nome,CPF,email,telefone,"P"+Integer.toString(contador_codigo_professor),data,senha);
 							professores.add(professor_auxiliar);
-							System.out.printf("Professor cadastrado com sucesso. Código: %s . Pressione ENTER para continuar.",professor_auxiliar.get_codigo());
+							System.out.printf("Professor cadastrado com sucesso. Código: %s . Pressione ENTER para continuar.",professor_auxiliar.get_codigo()); // olhar
 							break;
 // ****************************************************************************************************
 						case 3: // Aulas
@@ -138,7 +158,7 @@ public class menu{
 							contador_codigo_aula++;
 							aula_auxiliar = new aula(faixa, armas, horario, "C"+Integer.toString(contador_codigo_aula));
 							aulas.add(aula_auxiliar);
-							System.out.printf("Aula cadastrada com sucesso. Código: %s. Pressione ENTER para continuar.",aula_auxiliar.get_codigo());
+							System.out.printf("Aula cadastrada com sucesso. Código: %s. Pressione ENTER para continuar.",aula_auxiliar.get_codigo()); // olhar
 							input.nextLine();
 							break;
 					}
@@ -155,27 +175,30 @@ public class menu{
 					do{
 						try{
 							error = false;
-							System.out.println("0 - Menu principal.");
-							System.out.println("1 - Remoção Aluno.");
-							System.out.println("2 - Remoção Professor.");
-							System.out.println("3 - Remoção Aula.");
-							System.out.print("->");
-							submenu_option = input.nextInt();
+							submenu_option = Integer.parseInt((String)JOptionPane.showInputDialog(null,"0 - Menu principal.\n1 - Remoção Aluno.\n2 - Remoção Professor.\n3 - Remoção Aula\n->",empresa,JOptionPane.QUESTION_MESSAGE,logo,null,""));
+							//System.out.println("0 - Menu principal.");
+							//System.out.println("1 - Remoção Aluno.");
+							//System.out.println("2 - Remoção Professor.");
+							//System.out.println("3 - Remoção Aula.");
+							//System.out.print("->");
+							//submenu_option = input.nextInt();
 						}
-						catch(InputMismatchException InputMismatchException){
+						catch(InputMismatchException InputMismatchException){ // olhar
 							error = true;
-							System.out.println("Insira um número inteiro dentro do intervalo do menu para prosseguir. Pressione qualquer tecla para continuar.");
-							input.nextLine();
+							//System.out.println("Insira um número inteiro dentro do intervalo do menu para prosseguir. Pressione qualquer tecla para continuar.");
+							JOptionPane.showMessageDialog(null, "Insira um número inteiro dentro do intervalo do menu para prosseguir.", empresa, JOptionPane.ERROR_MESSAGE);
+							//input.nextLine();
 						}
 					}while(error || submenu_option > 3 || submenu_option < 0);
 					clear();
 					switch(submenu_option){
 						case 1:
 							if(alunos.size() == 0){
-								System.out.println("Não há alunos cadastrados no sistema.");
+								//System.out.println("Não há alunos cadastrados no sistema.");
+								JOptionPane.showMessageDialog(null, "Não há alunos cadastrados no sistema.", empresa, JOptionPane.ERROR_MESSAGE);
 								break;
 							}
-							exibir(alunos);
+							exibir(alunos); // olhar
 							System.out.print("\n->");
 							input.nextLine();
 							procurar = input.nextLine();
@@ -187,25 +210,29 @@ public class menu{
 									encontrou = true;
 									if(senha.equals(al.get_senha()) || senha.equals(senhaMestre)){
 										alunos.remove(al);
-										System.out.println("Aluno removido com sucesso.");
+										//System.out.println("Aluno removido com sucesso.");
+										JOptionPane.showMessageDialog(null, "Aluno removido com sucesso.", empresa, JOptionPane.INFORMATION_MESSAGE);
 									}
 									else{
-										System.out.println("Senha incorreta.");
+										//System.out.println("Senha incorreta.");
+										JOptionPane.showMessageDialog(null, "Senha incorreta.", empresa, JOptionPane.ERROR_MESSAGE);
 									}
 									break;
 								}
 							}
 							if(!encontrou){
-								System.out.println("Aluno inexistente no sistema.");
+								//System.out.println("Aluno inexistente no sistema.");
+								JOptionPane.showMessageDialog(null, "Aluno inexistente no sistema.", empresa, JOptionPane.ERROR_MESSAGE);
 							}
 							break;
 // ****************************************************************************************************
 						case 2:
 							if(professores.size() == 0){
-								System.out.println("Não há professores cadastrados no sistema.");
+								//System.out.println("Não há professores cadastrados no sistema.");
+								JOptionPane.showMessageDialog(null, "Não há professores cadastrados no sistema.", empresa, JOptionPane.ERROR_MESSAGE);
 								break;
 							}
-							exibir(professores);
+							exibir(professores); // olhar
 							System.out.print("\n->");
 							input.nextLine();
 							procurar = input.nextLine();
@@ -217,25 +244,29 @@ public class menu{
 									encontrou = true;
 									if(senha.equals(pr.get_senha()) || senha.equals(senhaMestre)){
 										professores.remove(pr);
-										System.out.println("Professor removido com sucesso.");
+										//System.out.println("Professor removido com sucesso.");
+										JOptionPane.showMessageDialog(null, "Professor removido com sucesso.", empresa, JOptionPane.INFORMATION_MESSAGE);
 									}
 									else{
-										System.out.println("Senha incorreta.");
+										//System.out.println("Senha incorreta.");
+										JOptionPane.showMessageDialog(null, "Senha incorreta.", empresa, JOptionPane.ERROR_MESSAGE);
 									}
 									break;
 								}
 							}
 							if(!encontrou){
-								System.out.println("Professor inexistente no sistema.");
+								//System.out.println("Professor inexistente no sistema.");
+								JOptionPane.showMessageDialog(null, "Professor inexistente no sistema.", empresa, JOptionPane.ERROR_MESSAGE);
 							}
 							break;
 // ****************************************************************************************************
 						case 3:
 							if(aulas.size() == 0){
-								System.out.println("Não há aulas cadastrados no sistema.");
+								//System.out.println("Não há aulas cadastrados no sistema.");
+								JOptionPane.showMessageDialog(null, "Não há aulas cadastradas no sistema.", empresa, JOptionPane.ERROR_MESSAGE);
 								break;
 							}
-							exibir(aulas);
+							exibir(aulas); // olhar
 							System.out.print("\n->");
 							input.nextLine();
 							procurar = input.nextLine();
@@ -249,12 +280,14 @@ public class menu{
 									}
 									aulas.remove(au);
 									System.out.println("Aula removida com sucesso.");
+									JOptionPane.showMessageDialog(null, "Aula removida com sucesso.", empresa, JOptionPane.INFORMATION_MESSAGE);
 									encontrou = true;
 									break;
 								}
 							}
 							if(!encontrou){
-								System.out.println("Aula inexistente no sistema.");
+								//System.out.println("Aula inexistente no sistema.");
+								JOptionPane.showMessageDialog(null, "Aula inexistente no sistema.", empresa, JOptionPane.ERROR_MESSAGE);
 							}
 							break;
 					}
@@ -264,27 +297,31 @@ public class menu{
 // ****************************************************************************************************
 				case 3:
 					if(alunos.size() == 0){
-						System.out.println("Não há alunos cadastrados no sistema.");
-						esperar(2000);
+						//System.out.println("Não há alunos cadastrados no sistema.");
+						JOptionPane.showMessageDialog(null, "Não há alunos cadastrados no sistema.", empresa, JOptionPane.ERROR_MESSAGE);
+						//esperar(2000);
 					}
 					else if(aulas.size() == 0){
-						System.out.println("Não há aulas cadastradas no sistema.");
-						esperar(2000);
+						//System.out.println("Não há aulas cadastradas no sistema.");
+						//esperar(2000);
+						JOptionPane.showMessageDialog(null, "Não há aulas cadastradas no sistema.", empresa, JOptionPane.ERROR_MESSAGE);
 					}
 					else{
 						do{
 							try{
 								error = false;
-								System.out.println("0 - Menu principal.");
-								System.out.println("1 - Vincular aula a um aluno.");
-								System.out.println("2 - Desvincular aula de um aluno.");
-								System.out.print("->");
-								submenu_option = input.nextInt();
+								submenu_option = Integer.parseInt((String)JOptionPane.showInputDialog(null,"0 - Menu principal.\n1 - Vincular aula a um aluno.\n2 - Desvincular aula de um aluno\n->",empresa,JOptionPane.QUESTION_MESSAGE,logo,null,""));
+								//System.out.println("0 - Menu principal.");
+								//System.out.println("1 - Vincular aula a um aluno.");
+								//System.out.println("2 - Desvincular aula de um aluno.");
+								//System.out.print("->");
+								//submenu_option = input.nextInt();
 							}
-							catch(InputMismatchException InputMismatchException){
+							catch(InputMismatchException InputMismatchException){ // olhar
 								error = true;
-								System.out.println("Insira um número inteiro dentro do intervalo do menu para prosseguir. Pressione qualquer tecla para continuar.");
-								input.nextLine();
+								//System.out.println("Insira um número inteiro dentro do intervalo do menu para prosseguir. Pressione qualquer tecla para continuar.");
+								//input.nextLine();
+								JOptionPane.showMessageDialog(null, "Insira um número inteiro dentro do intervalo do menu para prosseguir.", empresa, JOptionPane.ERROR_MESSAGE);
 							}
 						}while(error || submenu_option > 2 || submenu_option < 0);
 						clear();
@@ -293,7 +330,7 @@ public class menu{
 								do{
 									encontrou = false;
 									System.out.println("Selecione a aula a ser vinculada:");
-									exibir(aulas);
+									exibir(aulas); // olhar
 									System.out.print("\n->");
 									input.nextLine();
 									codigo = input.nextLine();
@@ -309,7 +346,7 @@ public class menu{
 								do{
 									encontrou = false;
 									System.out.println("Selecione o aluno a ser vinculado:");
-									exibir(alunos);
+									exibir(alunos); // olhar
 									System.out.print("\n->");
 									vincular = input.nextLine();
 									vincular = vincular.toUpperCase();
@@ -323,22 +360,25 @@ public class menu{
 									}
 									if(encontrou){
 										if(valido){
-											System.out.println("\nAula vinculada do aluno.");
+											//System.out.println("\nAula vinculada do aluno.");
+											JOptionPane.showMessageDialog(null, "Aula vinculada ao aluno.", empresa, JOptionPane.INFORMATION_MESSAGE);
 										}
 										else{
-											System.out.println("\nAluno possui faixa discrepante com o nível da aula.");
+											//System.out.println("\nAluno possui faixa discrepante com o nível da aula.");
+											JOptionPane.showMessageDialog(null, "Aluno possui faixa discrepante com o nível da aula.", empresa, JOptionPane.ERROR_MESSAGE);
 										}
 									}
 									else{
-										System.out.println("Aluno inexistente no sistema.");
+										//System.out.println("Aluno inexistente no sistema.");
+										JOptionPane.showMessageDialog(null, "Aluno inexistente no sistema.", empresa, JOptionPane.ERROR_MESSAGE);
 									}
 									do{
 										error = false;
 										try{
-											System.out.print("\nDeseja vincular outro aluno a esta mesma aula?(1 - sim, 2 - não)\n->");
+											System.out.print("\nDeseja vincular outro aluno a esta mesma aula?(1 - sim, 2 - não)\n->"); // olhar (usar a caixa do sim e não)
 											sub_inter_menuoption = input.nextInt();
 										}
-										catch(InputMismatchException InputMismatchException){
+										catch(InputMismatchException InputMismatchException){ // olhar
 											error = true;
 											System.out.println("Insira um número inteiro dentro do intervalo para prosseguir. Pressione qualquer tecla para continuar.");
 											input.nextLine();
@@ -350,7 +390,7 @@ public class menu{
 								do{
 									encontrou = false;
 									System.out.println("Selecione a aula a ser desvinculada:");
-									exibir(aulas);
+									exibir(aulas); // olhar
 									System.out.println("->");
 									input.nextLine();
 									codigo = input.nextLine();
@@ -366,7 +406,7 @@ public class menu{
 								do{
 									encontrou = false;
 									System.out.println("Selecione o aluno a ser desvinculado:");
-									exibir(alunos);
+									exibir(alunos); // olhar
 									System.out.print("\n->");
 									vincular = input.nextLine();
 									vincular = vincular.toUpperCase();
@@ -379,18 +419,20 @@ public class menu{
 										}
 									}
 									if(encontrou){
-										System.out.println("\nAula desvinculada do aluno.");
+										//System.out.println("\nAula desvinculada do aluno.");
+										JOptionPane.showMessageDialog(null, "Aula desvinculada do aluno.", empresa, JOptionPane.INFORMATION_MESSAGE);
 									}
 									else{
-										System.out.println("Aluno inexistente no sistema.");
+										//System.out.println("Aluno inexistente no sistema.");
+										JOptionPane.showMessageDialog(null, "Aluno inexistente no sistema.", empresa, JOptionPane.ERROR_MESSAGE);
 									}
 									do{
 										error = false;
 										try{
-											System.out.print("\nDeseja desvincular outro aluno desta mesma aula?(1 - sim, 2 - não)\n->");
+											System.out.print("\nDeseja desvincular outro aluno desta mesma aula?(1 - sim, 2 - não)\n->"); // olhar ()usar a caixa do sim e não
 											sub_inter_menuoption = input.nextInt();
 										}
-										catch(InputMismatchException InputMismatchException){
+										catch(InputMismatchException InputMismatchException){ // olhar
 											error = true;
 											System.out.println("Insira um número inteiro dentro do intervalo para prosseguir. Pressione qualquer tecla para continuar.");
 											input.nextLine();
@@ -412,28 +454,31 @@ public class menu{
 					do{
 						try{
 							error = false;
-							System.out.println("0 - Menu principal.");
-							System.out.println("1 - Consulta Aluno.");
-							System.out.println("2 - Consulta Professor.");
-							System.out.println("3 - Consulta Aula.");
-							System.out.print("->");
-							submenu_option = input.nextInt();
+							submenu_option = Integer.parseInt((String)JOptionPane.showInputDialog(null,"0 - Menu principal.\n1 - Consulta Aluno.\n2 - Connsulta Professor\n3 - Consulta Aula\n->",empresa,JOptionPane.QUESTION_MESSAGE,logo,null,""));
+							//System.out.println("0 - Menu principal.");
+							//System.out.println("1 - Consulta Aluno.");
+							//System.out.println("2 - Consulta Professor.");
+							//System.out.println("3 - Consulta Aula.");
+							//System.out.print("->");
+							//submenu_option = input.nextInt();
 						}
-						catch(InputMismatchException InputMismatchException){
+						catch(InputMismatchException InputMismatchException){ // olhar
 							error = true;
-							System.out.println("Insira um número inteiro dentro do intervalo do menu para prosseguir. Pressione qualquer tecla para continuar.");
-							input.nextLine();
+							//System.out.println("Insira um número inteiro dentro do intervalo do menu para prosseguir. Pressione qualquer tecla para continuar.");
+							JOptionPane.showMessageDialog(null, "Insira um número inteiro dentro do intervalo do menu para prosseguir.", empresa, JOptionPane.ERROR_MESSAGE);
+							//input.nextLine();
 						}
 					}while(error || submenu_option > 3 || submenu_option < 0);
 					clear();
 					switch(submenu_option){
 						case 1:
 							if(alunos.size() == 0){
-								System.out.println("Não há alunos cadastrados no sistema.");
+								//System.out.println("Não há alunos cadastrados no sistema.");
+								JOptionPane.showMessageDialog(null, "Não há aulas cadastradas no sistema.", empresa, JOptionPane.ERROR_MESSAGE);
 								invalido = true;
 								break;
 							}
-							exibir(alunos);
+							exibir(alunos); // olhar
 							System.out.println("Exibir todos - 0");
 							System.out.print("->");
 							input.nextLine();
@@ -442,12 +487,17 @@ public class menu{
 							if(procurar.equals("0")){
 								senha = insereSenha(false);
 								if(senha.equals(senhaMestre)){
+									auxiliar = " ";
 									for(aluno al : alunos){
-										al.exibe();
+										auxiliar.concat(al.exibe());
 									}
+									System.out.printf("\n%s\n",auxiliar); // olhar
+									JOptionPane.showMessageDialog(null, auxiliar,empresa,JOptionPane.INFORMATION_MESSAGE,logo);
 								}
 								else{
-									System.out.println("Senha incorreta!");
+									//System.out.println("Senha incorreta!");
+									JOptionPane.showMessageDialog(null, "Senha incorreta!",empresa,JOptionPane.ERROR_MESSAGE);
+
 								}
 							}
 							else{
@@ -456,30 +506,34 @@ public class menu{
 									if(procurar.equals(al.get_codigo())){
 										senha = insereSenha(false);
 										if(senha.equals(al.get_senha()) || senha.equals(senhaMestre)){
-											al.exibe();
+											//al.exibe();
+											JOptionPane.showMessageDialog(null, al.exibe(),empresa,JOptionPane.INFORMATION_MESSAGE,logo);
 										}
 										else{
-											System.out.println("Senha incorreta!");
+											//System.out.println("Senha incorreta!");
+											JOptionPane.showMessageDialog(null, "Senha incorreta.", empresa, JOptionPane.ERROR_MESSAGE);
 										}
 										encontrou = true;
 										break;
 									}
 								}
 								if(!encontrou){
-									System.out.println("Aluno inexistente no sistema.");
+									//System.out.println("Aluno inexistente no sistema.");
+									JOptionPane.showMessageDialog(null, "Aluno inexistente no sistema.", empresa, JOptionPane.ERROR_MESSAGE);
 								}
 							}
 							break;
 // ****************************************************************************************************
 						case 2:
 							if(professores.size() == 0){
-								System.out.println("Não há professores cadastrados no sistema.");
+								//System.out.println("Não há professores cadastrados no sistema.");
+								JOptionPane.showMessageDialog(null, "Não há professores cadastrados no sistema.", empresa, JOptionPane.ERROR_MESSAGE);
 								invalido = true;
 								break;
 							}
 							exibir(professores);
 							System.out.println("Exibir todos - 0");
-							System.out.print("\n->");
+							System.out.print("\n->"); // olhar
 							input.nextLine();
 							procurar = input.nextLine();
 							encontrou = false;
@@ -488,11 +542,12 @@ public class menu{
 								senha = insereSenha(false);
 								if(senha.equals(senhaMestre)){
 									for(professor pr : professores){
-										pr.exibe();
+										pr.exibe(); // olhar
 									}
 								}
 								else{
-									System.out.println("Senha incorreta!");
+									//System.out.println("Senha incorreta!");
+									JOptionPane.showMessageDialog(null, "Senha incorreta.", empresa, JOptionPane.ERROR_MESSAGE);
 								}
 							}
 							else{
@@ -500,77 +555,85 @@ public class menu{
 									if(procurar.equals(pr.get_codigo())){
 										senha = insereSenha(false);
 										if(senha.equals(pr.get_senha()) || senha.equals(senhaMestre)){
-											pr.exibe();
+											//pr.exibe();
+											JOptionPane.showMessageDialog(null, pr.exibe(), empresa, JOptionPane.INFORMATION_MESSAGE,logo);
 										}
 										else{
-											System.out.println("Senha incorreta!");
+											//System.out.println("Senha incorreta!");
+											JOptionPane.showMessageDialog(null, "Senha incorreta.", empresa, JOptionPane.ERROR_MESSAGE);
 										}
 										encontrou = true;
 										break;
 									}
 								}
 								if(!encontrou){
-									System.out.println("Professor inexistente no sistema.");
+									//System.out.println("Professor inexistente no sistema.");
+									JOptionPane.showMessageDialog(null, "Professor inexistente no sistema.", empresa, JOptionPane.ERROR_MESSAGE);
 								}
 							}
 							break;
 // ****************************************************************************************************
 						case 3:
 							if(aulas.size() == 0){
-								System.out.println("Não há aulas cadastradas no sistema.");
+								//System.out.println("Não há aulas cadastradas no sistema.");
+								JOptionPane.showMessageDialog(null, "Não há aulas cadastradas no sistema.", empresa, JOptionPane.ERROR_MESSAGE);
 								invalido = true;
 								break;
 							}
 							exibir(aulas);
 							System.out.println("Exibir todos - 0");
-							System.out.print("\n->");
+							System.out.print("\n->"); // olhar
 							input.nextLine();
 							procurar = input.nextLine();
 							procurar = procurar.toUpperCase();
 							if(procurar.equals("0")){
 								for(aula au : aulas){
-									au.exibe();
+									au.exibe(); // olhar
 								}
 							}
 							else{
 								encontrou = false;
 								for(aula au : aulas){
 									if(procurar.equals(au.get_codigo())){
-										au.exibe();
+										//au.exibe();
+										JOptionPane.showMessageDialog(null, au.exibe(), empresa, JOptionPane.INFORMATION_MESSAGE,logo);
 										encontrou = true;
 										break;
 									}
 								}
 								if(!encontrou){
-									System.out.println("Aula inexistente no sistema.");
+									//System.out.println("Aula inexistente no sistema.");
+									JOptionPane.showMessageDialog(null, "Aula inexistente no sistema", empresa, JOptionPane.ERROR_MESSAGE);
 								}
 							}
 							break;
 					}
 
-					System.out.println("Pressione ENTER para continuar.");
+					/*System.out.println("Pressione ENTER para continuar.");
 					input.nextLine();
 					if(invalido){
 						input.nextLine();
 					}
-					clear();
+					clear();*/
 					break;
 // ****************************************************************************************************
 				case 5:
 					do{
 						try{
 							error = false;
-							System.out.println("0 - Menu principal.");
-							System.out.println("1 - Atualizar dados do Aluno.");
-							System.out.println("2 - Atualizar dados do Professor.");
-							System.out.println("3 - Atualizar dados da Aula.");
-							System.out.print("->");
-							submenu_option = input.nextInt();
+							submenu_option = Integer.parseInt((String)JOptionPane.showInputDialog(null,"0 - Menu principal.\n1 - Atualizar dados aluno.\n2 -Atualizar dados professores\n 3- Atualizar dados da Aula\n->",empresa,JOptionPane.QUESTION_MESSAGE,logo,null,""));
+							//System.out.println("0 - Menu principal.");
+							//System.out.println("1 - Atualizar dados do Aluno.");
+							//System.out.println("2 - Atualizar dados do Professor.");
+							//System.out.println("3 - Atualizar dados da Aula.");
+							//System.out.print("->");
+							//submenu_option = input.nextInt();
 						}
-						catch(InputMismatchException InputMismatchException){
+						catch(InputMismatchException InputMismatchException){ // olhar
 							error = true;
-							System.out.println("Insira um número inteiro dentro do intervalo do menu para prosseguir. Pressione qualquer tecla para continuar.");
-							input.nextLine();
+							//System.out.println("Insira um número inteiro dentro do intervalo do menu para prosseguir. Pressione qualquer tecla para continuar.");
+							JOptionPane.showMessageDialog(null, "Insira um número inteiro dentro do intervalo do menu para prosseguir.", empresa, JOptionPane.ERROR_MESSAGE);
+							//input.nextLine();
 						}
 					}while(error || submenu_option > 3 || submenu_option < 0);
 					clear();
@@ -578,11 +641,12 @@ public class menu{
 					switch(submenu_option){
 						case 1:
 							if(alunos.size() == 0){
-								System.out.println("Não há alunos cadastrados no sistema.");
+								//System.out.println("Não há alunos cadastrados no sistema.");
+								JOptionPane.showMessageDialog(null, "Não há alunos cadastrados no sistema", empresa, JOptionPane.ERROR_MESSAGE);
 								invalido = true;
 								break;
 							}
-							exibir(alunos);
+							exibir(alunos); // olhar
 							System.out.println();
 							System.out.print("->");
 							input.nextLine();
@@ -596,21 +660,25 @@ public class menu{
 										do{
 											try{
 												error = false;
-												System.out.println("1 - Nome.");
-												System.out.println("2 - CPF.");
-												System.out.println("3 - Email.");
-												System.out.println("4 - Telefone.");
-												System.out.println("5 - Data de Nascimento.");
-												System.out.println("6 - Auxiliar.");
-												System.out.println("7 - Faixa.");
-												System.out.println("8 - Senha.");
-												System.out.print("->");
-												sub_inter_menuoption = input.nextInt();
+
+												sub_inter_menuoption = Integer.parseInt((String)JOptionPane.showInputDialog(null,"1 - Nome.\n2 - CPF.\n3 - Email.\n 4 - Telefone.\n5 - Data de Nascimento. \n6 - Auxiliar.\n7 - Faixa.\n8 - Senha.\n->",empresa,JOptionPane.QUESTION_MESSAGE,logo,null,""));
+
+												//System.out.println("1 - Nome.");
+												//System.out.println("2 - CPF.");
+												//System.out.println("3 - Email.");
+												//System.out.println("4 - Telefone.");
+												//System.out.println("5 - Data de Nascimento.");
+												//System.out.println("6 - Auxiliar.");
+												//System.out.println("7 - Faixa.");
+												//System.out.println("8 - Senha.");
+												//System.out.print("->");
+												//sub_inter_menuoption = input.nextInt();
 											}
-											catch(InputMismatchException InputMismatchException){
+											catch(InputMismatchException InputMismatchException){ // olhar
 												error = true;
-												System.out.println("Insira um número inteiro dentro do intervalo do menu para prosseguir. Pressione qualquer tecla para continuar.");
-												input.nextLine();
+												//System.out.println("Insira um número inteiro dentro do intervalo do menu para prosseguir. Pressione qualquer tecla para continuar.");
+												JOptionPane.showMessageDialog(null, "Insira um número inteiro dentro do intervalo do menu para prosseguir.", empresa, JOptionPane.ERROR_MESSAGE);
+												//input.nextLine();
 											}
 										}while(error || menu_option > 8 || menu_option < 1);
 										switch(sub_inter_menuoption){
@@ -624,7 +692,8 @@ public class menu{
 													for(aluno a : alunos){
 														if(CPF.equals(a.get_CPF())){
 															invalido = true;
-															System.out.println("CPF já existente no sistema, tente novamente.");
+															//System.out.println("CPF já existente no sistema, tente novamente.");
+															JOptionPane.showMessageDialog(null, "CPF já existente no sistema.", empresa, JOptionPane.ERROR_MESSAGE);
 															break;
 														}
 													}
@@ -652,7 +721,8 @@ public class menu{
 													vincular = insereSenha(false);
 													confirmaSenha = insereSenha(true);
 													if(!vincular.equals(confirmaSenha)){
-														System.out.println("Senhas distintas! Tente novamente.");
+														//System.out.println("Senhas distintas! Tente novamente.");
+														JOptionPane.showMessageDialog(null, "Senha distintas! Tente novamente.", empresa, JOptionPane.ERROR_MESSAGE);
 													}
 												}while(!vincular.equals(confirmaSenha));
 												al.set_senha(senha,vincular,senhaMestre);
@@ -660,7 +730,8 @@ public class menu{
 										}
 									}
 									else{
-										System.out.println("Senha incorreta!");
+										//System.out.println("Senha incorreta!");
+										JOptionPane.showMessageDialog(null, "Senha incorreta.", empresa, JOptionPane.ERROR_MESSAGE);
 										invalido = true;
 									}
 									encontrou = true;
@@ -668,20 +739,23 @@ public class menu{
 								}
 							}
 							if(!encontrou){
-								System.out.println("Aluno inexistente no sistema.");
+								//System.out.println("Aluno inexistente no sistema.");
+								JOptionPane.showMessageDialog(null, "Aluno inexistente no sistema.", empresa, JOptionPane.ERROR_MESSAGE);
 							}
 							else if(!invalido){
-								System.out.println("Aluno atualizado com sucesso.");
+								//System.out.println("Aluno atualizado com sucesso.");
+								JOptionPane.showMessageDialog(null, "Aluno atualizado com sucesso.", empresa, JOptionPane.INFORMATION_MESSAGE);
 							}
 							break;
 	// ****************************************************************************************************
 						case 2:
 							if(professores.size() == 0){
-								System.out.println("Não há professores cadastrados no sistema.");
+								//System.out.println("Não há professores cadastrados no sistema.");
+								JOptionPane.showMessageDialog(null, "Não há professores cadastrados no sistema.", empresa, JOptionPane.ERROR_MESSAGE);
 								invalido = true;
 								break;
 							}
-							exibir(professores);
+							exibir(professores); // olhar
 							System.out.println();
 							System.out.print("\n->");
 							procurar = input.nextLine();
@@ -695,19 +769,21 @@ public class menu{
 										do{
 											try{
 												error = false;
-												System.out.println("1 - Nome.");
-												System.out.println("2 - CPF.");
-												System.out.println("3 - Email.");
-												System.out.println("4 - Telefone.");
-												System.out.println("5 - Data de Nascimento.");
-												System.out.println("6 - Senha.");
-												System.out.print("->");
-												sub_inter_menuoption = input.nextInt();
+												sub_inter_menuoption = Integer.parseInt((String)JOptionPane.showInputDialog(null,"1 - Nome.\n2 - CPF.\n3 - Email.\n 4 - Telefone.\n5 - Data de Nascimento. \n6 - Senha.\n->",empresa,JOptionPane.QUESTION_MESSAGE,logo,null,""));
+												//System.out.println("1 - Nome.");
+												//System.out.println("2 - CPF.");
+												//System.out.println("3 - Email.");
+												//System.out.println("4 - Telefone.");
+												//System.out.println("5 - Data de Nascimento.");
+												//System.out.println("6 - Senha.");
+												//System.out.print("->");
+												//sub_inter_menuoption = input.nextInt();
 											}
-											catch(InputMismatchException InputMismatchException){
+											catch(InputMismatchException InputMismatchException){ // olhar
 												error = true;
-												System.out.println("Insira um número inteiro dentro do intervalo do menu para prosseguir. Pressione qualquer tecla para continuar.");
-												input.nextLine();
+												//System.out.println("Insira um número inteiro dentro do intervalo do menu para prosseguir. Pressione qualquer tecla para continuar.");
+												JOptionPane.showMessageDialog(null, "Insira um número inteiro dentro do intervalo do menu para prosseguir.", empresa, JOptionPane.ERROR_MESSAGE);
+												//input.nextLine();
 											}
 										}while(error || menu_option > 6 || menu_option < 1);
 										switch(sub_inter_menuoption){
@@ -721,7 +797,8 @@ public class menu{
 													for(professor p : professores){
 														if(CPF.equals(p.get_CPF())){
 															invalido = true;
-															System.out.println("CPF já existente no sistema, tente novamente.");
+															//System.out.println("CPF já existente no sistema, tente novamente.");
+															JOptionPane.showMessageDialog(null, "CPF já existente no sistema, tente novamente.", empresa, JOptionPane.ERROR_MESSAGE);
 															break;
 														}
 													}
@@ -743,7 +820,8 @@ public class menu{
 													vincular = insereSenha(false);
 													confirmaSenha = insereSenha(true);
 													if(!vincular.equals(confirmaSenha)){
-														System.out.println("Senhas distintas! Tente novamente.");
+														//System.out.println("Senhas distintas! Tente novamente.");
+														JOptionPane.showMessageDialog(null, "Senhas distintas! Tente novamente.", empresa, JOptionPane.ERROR_MESSAGE);
 													}
 												}while(!vincular.equals(confirmaSenha));
 												pr.set_senha(senha,vincular,senhaMestre);
@@ -751,7 +829,8 @@ public class menu{
 										}
 									}
 									else{
-										System.out.println("Senha incorreta!");
+										//System.out.println("Senha incorreta!");
+										JOptionPane.showMessageDialog(null, "Senha incorreta.", empresa, JOptionPane.ERROR_MESSAGE);
 										invalido = true;
 									}
 									encontrou = true;
@@ -759,20 +838,23 @@ public class menu{
 								}
 							}
 							if(!encontrou){
-								System.out.println("Professor inexistente no sistema.");
+								//System.out.println("Professor inexistente no sistema.");
+								JOptionPane.showMessageDialog(null, "Professor inexistente no sistema.", empresa, JOptionPane.ERROR_MESSAGE);
 							}
 							else if(!invalido){
-								System.out.println("Professor atualizado com sucesso.");
+								//System.out.println("Professor atualizado com sucesso.");
+								JOptionPane.showMessageDialog(null, "Professor atualizado com sucesso.", empresa, JOptionPane.INFORMATION_MESSAGE);
 							}
 							break;
 	// ****************************************************************************************************
 						case 3:
 							if(aulas.size() == 0){
-								System.out.println("Não há aulas cadastradas no sistema.");
+								//System.out.println("Não há aulas cadastradas no sistema.");
+								JOptionPane.showMessageDialog(null, "Não há aulas cadastradas no sistema.", empresa, JOptionPane.ERROR_MESSAGE);
 								invalido = true;
 								break;
 							}
-							exibir(aulas);
+							exibir(aulas); // olhar
 							System.out.println();
 							System.out.print("\n->");
 							input.nextLine();
@@ -784,16 +866,19 @@ public class menu{
 									do{
 										try{
 											error = false;
-											System.out.println("1 - Armas.");
-											System.out.println("2 - Faixa.");
-											System.out.println("3 - Horário.");
-											System.out.print("->");
-											sub_inter_menuoption = input.nextInt();
+
+											sub_inter_menuoption = Integer.parseInt((String)JOptionPane.showInputDialog(null,"1 - Armas.\n2 - Faixa.\n3 - Horário.\n->",empresa,JOptionPane.QUESTION_MESSAGE,logo,null,""));
+											//System.out.println("1 - Armas.");
+											//System.out.println("2 - Faixa.");
+											//System.out.println("3 - Horário.");
+											//System.out.print("->");
+											//sub_inter_menuoption = input.nextInt();
 										}
-										catch(InputMismatchException InputMismatchException){
+										catch(InputMismatchException InputMismatchException){ // olhar
 											error = true;
-											System.out.println("Insira um número inteiro dentro do intervalo do menu para prosseguir. Pressione qualquer tecla para continuar.");
-											input.nextLine();
+											//System.out.println("Insira um número inteiro dentro do intervalo do menu para prosseguir. Pressione qualquer tecla para continuar.");
+											JOptionPane.showMessageDialog(null, "Insira um número inteiro dentro do intervalo do menu para prosseguir.", empresa, JOptionPane.ERROR_MESSAGE);
+											//input.nextLine();
 										}
 									}while(error || menu_option > 5 || menu_option < 1);
 									switch(sub_inter_menuoption){
@@ -812,16 +897,18 @@ public class menu{
 								}
 							}
 							if(!encontrou){
-								System.out.println("Aula inexistente no sistema.");
+								//System.out.println("Aula inexistente no sistema.");
+								JOptionPane.showMessageDialog(null, "Aula inexistente no sistema.", empresa, JOptionPane.ERROR_MESSAGE);
 							}
 							else{
-								System.out.println("Aula atualizada com sucesso.");
+								//System.out.println("Aula atualizada com sucesso.");
+								JOptionPane.showMessageDialog(null, "Aula atualizada com sucesso.", empresa, JOptionPane.INFORMATION_MESSAGE);
 							}
 							break;
 					}
 
-					System.out.println("Pressione ENTER para continuar.");
-					input.nextLine();
+					/*System.out.println("Pressione ENTER para continuar.");
+					input.nextLine();*/
 					//if(invalido){
 						//input.nextLine();
 					//}
@@ -830,11 +917,12 @@ public class menu{
 // ****************************************************************************************************
 				case 6:
 					if(alunos.size() == 0 && professores.size() == 0){
-						System.out.println("Cadastros inexistentes.");
+						//System.out.println("Cadastros inexistentes.");
+						JOptionPane.showMessageDialog(null, "Cadastros inexistentes.", empresa, JOptionPane.ERROR_MESSAGE);
 					}
 					else{
 						System.out.print("Insira a código do aluno/professor que deseja entrar.\n->");
-						input.nextLine();
+						input.nextLine(); // olhar
 						codigo = input.nextLine();
 						encontrou = false;
 						codigo = codigo.toUpperCase();
@@ -843,17 +931,18 @@ public class menu{
 								if(al.get_codigo().equals(codigo)){
 									encontrou = true;
 									if(al.get_mes_pago()){
-										System.out.printf("Seja bem vindo, %s.", al.get_nome());
+										System.out.printf("Seja bem vindo, %s.", al.get_nome()); // olhar
 										break;
 									}
 									else{
-										System.out.printf("Pague sua valor para entrar, %s.", al.get_nome());
+										System.out.printf("Pague sua valor para entrar, %s.", al.get_nome()); // olhar
 										break;
 									}
 								}
 							}
 							if(!encontrou){
-								System.out.println("Aluno inexistente no sistema.");
+								//System.out.println("Aluno inexistente no sistema.");
+								JOptionPane.showMessageDialog(null, "Aluno inexistente no sistema.", empresa, JOptionPane.ERROR_MESSAGE);
 							}
 						}
 						else if(codigo.charAt(0) == 'P'){
@@ -866,29 +955,32 @@ public class menu{
 									DateTimeFormatter formatterData = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 									String dataFormatada = formatterData.format(agora);
 									pr.registra_acesso(dataFormatada);
-									System.out.printf("Acesso registrado, %s", pr.get_nome());
+									System.out.printf("Acesso registrado, %s", pr.get_nome()); // olhar
 								}
 							}
 							if(!encontrou){
-								System.out.println("Professor inexistente no sistema.");
+								//System.out.println("Professor inexistente no sistema.");
+								JOptionPane.showMessageDialog(null, "Professor inexistente no sistema.", empresa, JOptionPane.ERROR_MESSAGE);
 							}
 						}
 						else{
-							System.out.println("Pessoa inexistente no sistema.");
+							//System.out.println("Pessoa inexistente no sistema.");
+							JOptionPane.showMessageDialog(null, "Pessoa inexistente no sistema.", empresa, JOptionPane.ERROR_MESSAGE);
 						}
 					}
-					esperar(2000);
-					clear();
+					/*esperar(2000);
+					clear();*/
 					break;
 // ****************************************************************************************************
 				case 7: ///PARTE DO banco
 					break;
 				case 8:///Envio de comprovante para professores
 					if(professores.size() == 0){
-						System.out.println("Não há professores cadastrados.");
+						//System.out.println("Não há professores cadastrados.");
+						JOptionPane.showMessageDialog(null, "Não há professores cadastrados.", empresa, JOptionPane.ERROR_MESSAGE);
 					}
 					else{
-						System.out.print("Insira senha mestre ->");
+						System.out.print("Insira senha mestre ->"); // olhar
 						input.nextLine();
 						senha = input.nextLine();
 						if(senha.equals(senhaMestre)){
@@ -896,15 +988,14 @@ public class menu{
 								pf.renova_mes();
 							}
 						}
-						System.out.print("Comprovantes enviados por email a todos os professores.");
+						//System.out.print("Comprovantes enviados por email a todos os professores.");
+						JOptionPane.showMessageDialog(null, "Comprovantes enviados por email a todos os professores.", empresa, JOptionPane.INFORMATION_MESSAGE);
 					}
-					esperar(2000);
-					clear();
+					/*esperar(2000);
+					clear();*/
 					break;
 				default: // Sair do sistema
-					System.out.println("Obrigado por utilizar o sistema desenvolvido por RAH - Desenvolvimento de Sistemas.");
-					esperar(5000);
-					clear();
+					encerra();
 			}
 		}while(menu_option != 0);
 	}
@@ -921,14 +1012,15 @@ public class menu{
 			}
 		}
 		catch(final Exception e){
-			System.out.println("\n\tNão foi possível limpar a tela.");
+			//System.out.println("\n\tNão foi possível limpar a tela.");
+			JOptionPane.showMessageDialog(null, "Não foi posspivel limpar a tela.", empresa, JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
 	// Método que coleta o nome
 	public static String insereNome(){
 		String nome;
-		System.out.print("Nome ->");
+		System.out.print("Nome ->"); // olhar
 		input.nextLine();
 		nome = input.nextLine();
 		nome = nome.toUpperCase();
@@ -939,7 +1031,7 @@ public class menu{
 	public static String insereSenha(boolean confirma){
 		String senha;
 		if(confirma){
-			System.out.print("Confirme senha ->");
+			System.out.print("Confirme senha ->"); // olhar
 		}
 		else{
 			System.out.print("Senha ->");
@@ -955,12 +1047,13 @@ public class menu{
 		do{//Verifica conflito CPF
 			System.out.print("CPF->"); // 000 000 000 00
 			//CPF = input.nextLine();
-			CPF = input.nextLine();
+			CPF = input.nextLine(); // olhar
 			if(CPF.matches("[0-9]+") && CPF.length() == 11){
 				invalido = false;
 			}
 			if(invalido){
-				System.out.println("CPF inválido, tente novamente digitando apenas números.");
+				//System.out.println("CPF inválido, tente novamente digitando apenas números.");
+				JOptionPane.showMessageDialog(null, "CPF inválido, tente novamente digitando apenas números.", empresa, JOptionPane.ERROR_MESSAGE);
 			}
 		}while(invalido);
 		// Formata o CPF (00000000000 -> 000.000.000-00)
@@ -973,7 +1066,7 @@ public class menu{
 		String email;
 		do{
 			System.out.printf("Email ->"); // * @ *.com* // FUNÇÃO QUE VERIFICA O EMAIL
-			email = input.nextLine();
+			email = input.nextLine(); // olhar
 			email = email.toLowerCase();
 			if(email.matches("^(?=.{1,64}@)[a-z0-9_-]+(\\.[a-z0-9_-]+)*@"/*nome do email*/+"[^-][a-z0-9-]+(\\.[a-z0-9-]+)*(\\.[a-z]{2,})$")/*domínio*/){
 				/*
@@ -986,7 +1079,8 @@ public class menu{
 				invalido = false;
 			}
 			else{
-				System.out.println("Email inválido, tente novamente.");
+				//System.out.println("Email inválido, tente novamente.");
+				JOptionPane.showMessageDialog(null, "Email inválido, tente novamente.", empresa, JOptionPane.ERROR_MESSAGE);
 			}
 		}while(invalido);
 		return email;
@@ -998,13 +1092,15 @@ public class menu{
 		String telefone;
 		do{
 			System.out.printf("Telefone ->"); // 00 &0000 0000 // DDD + (1) + 8 NºS
-			telefone = input.nextLine();
+			telefone = input.nextLine(); // olhar
 			if((telefone.length() == 10 || telefone.length() == 11) && telefone.matches("[0-9]+")){ // Verifica se existe somente números e verifica o tamanho (caso de celular / telefone fixo)
 				invalido = false;
 			}
 			else{
-				System.out.println("Telefone inválido, tente novamente.");							}
-			}while(invalido);
+				//System.out.println("Telefone inválido, tente novamente.");							}
+				JOptionPane.showMessageDialog(null, "Telefone inválido, tente novamente.", empresa, JOptionPane.ERROR_MESSAGE);
+			}
+		}while(invalido);
 		if(telefone.length() == 10){
 			return telefone.substring(0,2) + ' ' + telefone.substring(2,6) + '-' + telefone.substring(6);
 		}
@@ -1019,7 +1115,7 @@ public class menu{
 		do{
 			error = true;
 			do{
-				System.out.printf("Data de nascimento (DD MM AAAA) ->");
+				System.out.printf("Data de nascimento (DD MM AAAA) ->"); // olhar
 				try{
 					error = false;
 					dia = input.nextInt();
@@ -1053,7 +1149,7 @@ public class menu{
 	public static boolean insereAuxiliar(){
 		boolean error = true;
 		int aux = 1;
-		do{ //Inserção da forma de pagamento.
+		do{
 			if(aux > 2 || aux < 1){
 				System.out.println("Insira um número inteiro dentro do intervalo para prosseguir. Pressione qualquer tecla para continuar.");
 				input.nextLine();
@@ -1062,7 +1158,7 @@ public class menu{
 			}
 			try{
 				error = false;
-				System.out.printf("Aluno auxiliar (1-Não; 2-Sim) ->");
+				System.out.printf("Aluno auxiliar (1-Não; 2-Sim) ->"); // olhar (caixa do sim ou não)
 				aux = input.nextInt();
 			}
 			catch(InputMismatchException InputMismatchException){
@@ -1084,34 +1180,39 @@ public class menu{
 		boolean error = true;
 		do{ // Inserção do nível
 			if(faixa > 10 || faixa < 0){
-				System.out.println("Insira um número inteiro dentro do intervalo para prosseguir. Pressione qualquer tecla para continuar.");
+				/*System.out.println("Insira um número inteiro dentro do intervalo para prosseguir. Pressione qualquer tecla para continuar.");
 				input.nextLine();
 				input.nextLine();
-				clear();
+				clear();*/
+				JOptionPane.showMessageDialog(null, "Insira um número dentro do intervalo para prosseguir.", empresa, JOptionPane.ERROR_MESSAGE);
 			}
 			try{
 				error = false;
-				System.out.println("Faixa:");
-				System.out.println("\t0 - Amerela.");
-				System.out.println("\t1 - Dourada.");
-				System.out.println("\t2 - Laranja.");
-				System.out.println("\t3 - Jade.");
-				System.out.println("\t4 - Verde.");
-				System.out.println("\t5 - Roxa.");
-				System.out.println("\t6 - Azul.");
-				System.out.println("\t7 - Vermelha.");
-				System.out.println("\t8 - Marrom Claro.");
-				System.out.println("\t9 - Marrom.");
-				System.out.println("\t10 - Preta.");
-				System.out.print("->");
-				faixa = input.nextInt();
+
+				faixa = Integer.parseInt((String)JOptionPane.showInputDialog(null,"0 - Amerela.\n1 - Dourada.\n2 - Laranja\n3 - Jade.\n4 - Verde.\n5 - Roxa.\n6 - Azul.\n8 - Vermelha.\n9 - Marrom.\n10 - Preta\n->",empresa,JOptionPane.QUESTION_MESSAGE,logo,null,""));
+
+				//System.out.println("Faixa:");
+				///System.out.println("\t0 - Amerela.");
+				//System.out.println("\t1 - Dourada.");
+				//System.out.println("\t2 - Laranja.");
+				//System.out.println("\t3 - Jade.");
+				//System.out.println("\t4 - Verde.");
+				//System.out.println("\t5 - Roxa.");
+				//System.out.println("\t6 - Azul.");
+				//System.out.println("\t7 - Vermelha.");
+				//System.out.println("\t8 - Marrom Claro.");
+				//System.out.println("\t9 - Marrom.");
+				//System.out.println("\t10 - Preta.");
+				//System.out.print("->");
+				//faixa = input.nextInt();
 			}
-			catch(InputMismatchException InputMismatchException){
+			catch(InputMismatchException InputMismatchException){ // olhar
 				error = true;
-				System.out.println("Insira um número inteiro para prosseguir. Pressione qualquer tecla para continuar.");
+				/*System.out.println("Insira um número inteiro para prosseguir. Pressione qualquer tecla para continuar.");
 				input.nextLine();
 				input.nextLine();
-				clear();
+				clear();*/
+				JOptionPane.showMessageDialog(null, "Insira um número inteiro para prosseguir.", empresa, JOptionPane.ERROR_MESSAGE);
 			}
 		}while(error || faixa > 10 || faixa < 0);
 		return faixa;
@@ -1122,7 +1223,7 @@ public class menu{
 		int armas = 1;
 		do{ //Inserção arma
 			if(armas > 2 || armas < 1){
-				System.out.println("Insira um número inteiro dentro do intervalo para prosseguir. Pressione qualquer tecla para continuar.");
+				System.out.println("Insira um número inteiro dentro do intervalo para prosseguir. Pressione qualquer tecla para continuar."); // olhar (caixa sim ou não)
 				input.nextLine();
 				input.nextLine();
 				clear();
@@ -1151,67 +1252,75 @@ public class menu{
 		boolean error;
 		do{ // Inserção do dia da semana
 			if(dia > 6 || dia < 1){
-				System.out.println("Insira um número inteiro dentro do intervalo para prosseguir. Pressione qualquer tecla para continuar.");
+				/*System.out.println("Insira um número inteiro dentro do intervalo para prosseguir. Pressione qualquer tecla para continuar.");
 				input.nextLine();
 				input.nextLine();
-				clear();
+				clear();*/
+				JOptionPane.showMessageDialog(null, "Insira um número inteiro dentro do intervalo para prosseguir.", empresa, JOptionPane.ERROR_MESSAGE);
 			}
 			try{
 				error = false;
-				System.out.println("Dia da semana:");
-				System.out.println("\t1 - Segunda-feira.");
-				System.out.println("\t2 - Terça-feira.");
-				System.out.println("\t3 - Quarta-feira.");
-				System.out.println("\t4 - Quinta-feira.");
-				System.out.println("\t5 - Sexta-feira.");
-				System.out.println("\t6 - Sábado.");
-				System.out.print("->");
-				dia = input.nextInt();
+
+				dia = Integer.parseInt((String)JOptionPane.showInputDialog(null,"1 - Segunda-feira.\n2 - Terça-feira.\n3 - Quarta-feira.\n 4 - Quinta-feira.\n5 - Sexta-feira. \n6 - Sábando.\n->",empresa,JOptionPane.QUESTION_MESSAGE,logo,null,""));
+
+				//System.out.println("Dia da semana:");
+				//System.out.println("\t1 - Segunda-feira.");
+				//System.out.println("\t2 - Terça-feira.");
+				//System.out.println("\t3 - Quarta-feira.");
+				//System.out.println("\t4 - Quinta-feira.");
+				//System.out.println("\t5 - Sexta-feira.");
+				//System.out.println("\t6 - Sábado.");
+				//System.out.print("->");
+				//dia = input.nextInt();
 			}
 			catch(InputMismatchException InputMismatchException){
 				error = true;
-				System.out.println("Insira um número inteiro para prosseguir. Pressione qualquer tecla para continuar.");
+				/*System.out.println("Insira um número inteiro para prosseguir. Pressione qualquer tecla para continuar.");
 				input.nextLine();
 				input.nextLine();
-				clear();
+				clear();*/
+				JOptionPane.showMessageDialog(null, "Insira um número inteiro para prosseguir.", empresa, JOptionPane.ERROR_MESSAGE);
 			}
 		}while(error || dia > 6 || dia < 1);
 		do{ // Inserção do horário
 			if(hora < 1 || (hora > 15 && dia != 6) || (hora > 11 && dia == 6)){
-				System.out.println("Insira um número inteiro dentro do intervalo para prosseguir. Pressione qualquer tecla para continuar.");
+				/*System.out.println("Insira um número inteiro dentro do intervalo para prosseguir. Pressione qualquer tecla para continuar.");
 				input.nextLine();
 				input.nextLine();
-				clear();
+				clear();*/
+				JOptionPane.showMessageDialog(null, "Insira um número inteiro dentro do intervalo para prosseguir.", empresa, JOptionPane.ERROR_MESSAGE);
 			}
 			try{
 				error = false;
-				System.out.println("Horário:");
-				System.out.println("\t1 - 7:00.");
-				System.out.println("\t2 - 8:00.");
-				System.out.println("\t3 - 9:00.");
-				System.out.println("\t4 - 10:00.");
-				System.out.println("\t5 - 11:00.");
-				System.out.println("\t6 - 12:00.");
-				System.out.println("\t7 - 13:00.");
-				System.out.println("\t8 - 14:00.");
-				System.out.println("\t9 - 15:00.");
-				System.out.println("\t10 - 16:00.");
-				System.out.println("\t11 - 17:00.");
-				if(dia != 6){
-					System.out.println("\t12 - 18:00.");
-					System.out.println("\t13 - 19:00.");
-					System.out.println("\t14 - 20:00.");
-					System.out.println("\t15 - 21:00.");
-				}
-				System.out.print("->");
-				hora = input.nextInt();
+				hora = Integer.parseInt((String)JOptionPane.showInputDialog(null,"1 - 1 - 7:00.\n2 - 8:00.\n3 - 9:00.\n 4 - 10:00.\n5 - 11:00. \n6 - 12:00.\n7 - 13:00.\n8 - 14:00.\n9 - 15:00.\n 10 - 16:00.\n11 - 17:00."+(dia != 6 ? "\n12 - 18:00.\n14 - 19:00.\n15 - 21:00." : null) + "\n->",empresa,JOptionPane.QUESTION_MESSAGE,logo,null,""));
+				//System.out.println("Horário:");
+				//System.out.println("\t1 - 7:00.");
+				//System.out.println("\t2 - 8:00.");
+				//System.out.println("\t3 - 9:00.");
+				//System.out.println("\t4 - 10:00.");
+				//System.out.println("\t5 - 11:00.");
+				//System.out.println("\t6 - 12:00.");
+				//System.out.println("\t7 - 13:00.");
+				//System.out.println("\t8 - 14:00.");
+				//System.out.println("\t9 - 15:00.");
+				//System.out.println("\t10 - 16:00.");
+				//System.out.println("\t11 - 17:00.");
+				//if(dia != 6){
+				//	System.out.println("\t12 - 18:00.");
+				//	System.out.println("\t13 - 19:00.");
+				//	System.out.println("\t14 - 20:00.");
+				//	System.out.println("\t15 - 21:00.");
+				//}
+				//System.out.print("->");
+				//hora = input.nextInt();
 			}
-			catch(InputMismatchException InputMismatchException){
+			catch(InputMismatchException InputMismatchException){ // olhar
 				error = true;
-				System.out.println("Insira um número inteiro para prosseguir. Pressione qualquer tecla para continuar.");
+				/*System.out.println("Insira um número inteiro para prosseguir. Pressione qualquer tecla para continuar.");
 				input.nextLine();
 				input.nextLine();
-				clear();
+				clear();*/
+				JOptionPane.showMessageDialog(null, "Insira um número inteiro para prosseguir.", empresa, JOptionPane.ERROR_MESSAGE);
 			}
 		}while(error || hora < 1 || (hora > 15 && dia != 6) || (hora > 11 && dia == 6));
 		hora += 6;
@@ -1240,7 +1349,7 @@ public class menu{
 	// Método que lista os nomes e codigos para a consulta
 	public static <T> void exibir(LinkedList <T> lista){
 		for(T aux : lista){
-			System.out.printf("\t%s", aux);
+			System.out.printf("\t%s", aux); // olhar
 		}
 	}
 
@@ -1249,5 +1358,12 @@ public class menu{
 			Thread.sleep(tempo);
 		}
 		catch(InterruptedException e){}
+	}
+
+	public static void encerra(){
+		//System.out.println("Obrigado por utilizar o sistema desenvolvido por RAH - Desenvolvimento de Sistemas.");
+		JOptionPane.showMessageDialog(null, "Obrigado por utilizar o sistema desenvolvido por RAH - Desenvolvimento de Sistemas.",empresa,JOptionPane.ERROR_MESSAGE,logo);
+		//esperar(5000);
+		//clear();
 	}
 }

@@ -9,7 +9,7 @@ import javax.mail.internet.*;
 import javax.activation.*;
 
 public class professor extends Info{
-	LinkedList <String> horario = new LinkedList <String>(); // data e hora de entrada e saída
+	LinkedList <String> horario = new LinkedList <String>(); // Data e hora de entrada e saída
     public professor(String nome, String CPF, String email, String telefone, String codigo, Data nascimento, String senha){
         this.nome = nome;
         this.CPF = CPF;
@@ -66,7 +66,6 @@ public class professor extends Info{
 		String nome_arquivo = get_codigo().concat(".txt");
 		try{
 			FileWriter comprovante = new FileWriter(nome_arquivo);
-
 			PrintWriter escrever = new PrintWriter(comprovante);
 			escrever.printf("Entradas e saídas relativas ao professor %s (%s):\n", get_nome(),get_codigo());
 			for(String s : horario){
@@ -97,16 +96,16 @@ public class professor extends Info{
 		});
 		try{
 			MimeMessage mensagem = new MimeMessage(sessao); // Cria o objeto mensagem
+			String arquivo = this.codigo.concat(".txt"); // Nome do arquivo
+			DataSource caminho = new FileDataSource(arquivo); // Localização do arquivo no diretório
+			BodyPart corpo = new MimeBodyPart(); // Cria a mensagem do email
+			Multipart anexo = new MimeMultipart(); // Cria outra parte da mensagem (para o anexo e juntar com o texto)
 			mensagem.setFrom(new InternetAddress(username)); // Coloca o remetente do email
 			mensagem.addRecipient(Message.RecipientType.TO, new InternetAddress(this.email)); // Adiciona o email do professor a ser enviado
 			mensagem.setSubject("Ponto eletrônico - Relatório mensal"); // Assunto do email
-			BodyPart corpo = new MimeBodyPart(); // Cria a mensagem do email
 			corpo.setText("Olá " + this.nome + ",\n\nObrigado por fazer parte de nossa academia, segue em anexo o relatório mensal de acesso à academia. Tenha um bom dia.\n\nAtenciosamente,\nAcademia Cobra Kai. \n\n\nEste é um email automático, por favor não responda.\n\nDesenvolvido por RAH - Desenvolvimento de sistemas."); // A mensagem propriamente dita
-			Multipart anexo = new MimeMultipart(); // Cria outra parte da mensagem (para o anexo e juntar com o texto)
 			anexo.addBodyPart(corpo); // Adiciona o texto
 			corpo = new MimeBodyPart(); // Adiciona o campo para anexo
-			String arquivo = this.codigo.concat(".txt");
-			DataSource caminho = new FileDataSource(arquivo);
 			corpo.setDataHandler(new DataHandler(caminho)); // Coleta o arquivo para anexar
 			corpo.setFileName(arquivo); // Coloca o nome do arquivo
 			anexo.addBodyPart(corpo); // Junta o arquivo com o objeto do anexo
@@ -120,20 +119,25 @@ public class professor extends Info{
 
 	// Método que exibe as informações do professor
 	@Override
-	public void exibe(){
-		System.out.println();
-		System.out.printf("Nome: %s\n", get_nome());
-		System.out.printf("CPF: %s\n", get_CPF());
-		System.out.printf("Data de nascimento: " + get_nascimento()+"\n");
-		System.out.printf("Email: %s\n", get_email());
-		System.out.printf("Telefone: %s\n", get_telefone());
-		System.out.printf("Número codigo: %s\n", get_codigo());
-		System.out.println("Registro de acesso:");
+	public String exibe(){
+		String tudo = "\nNome: " + get_nome() + "\nCPF: " + get_CPF() + "\nData de nascimento: " + get_nascimento() + "\nEmail: " + get_email() + "\nTelefone: " + get_telefone() + "\nCódigo: " + get_codigo() + "\nRegistro de acesso:";
+		//System.out.println();
+		//System.out.printf("Nome: %s\n", get_nome());
+		//System.out.printf("CPF: %s\n", get_CPF());
+		//System.out.printf("Data de nascimento: " + get_nascimento()+"\n");
+		//System.out.printf("Email: %s\n", get_email());
+		//System.out.printf("Telefone: %s\n", get_telefone());
+		//System.out.printf("Código: %s\n", get_codigo());
+		//System.out.println("Registro de acesso:");
 		//// Exibir o registro de entrada e saída
 		for(String s : horario){
-			System.out.printf("\t%s\n",s);
+			tudo.concat("\n");
+			tudo.concat(s);
+			//System.out.printf("\t%s\n",s);
 		}
-		System.out.println();
+		//System.out.println();
+		tudo.concat("\n");
+		return tudo;
 	}
 
 	// Método que retorna nome e código de um cliente para escolha de consulta

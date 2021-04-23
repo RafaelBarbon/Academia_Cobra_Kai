@@ -60,13 +60,14 @@ public class aula{
         this.armas = arma;
     }
 
-	public void exibe(){
-		System.out.println();
-		System.out.printf("Código: %s\n", get_codigo());
-		System.out.printf("Faixa: %s\n", get_faixa());
-		System.out.printf("Horário: %s\n", get_horario());
-		System.out.printf("Armas: %s\n", get_arma() ? "sim" : "não");
-		System.out.println();
+	public String exibe(){
+		return String.format("\nCódigo: %s\nFaixa: %s\nHorário: %s\nArmas: %s\n\n",get_codigo(), get_faixa(), get_horario(),get_arma() ? "sim" : "não");
+		//System.out.println();
+		//System.out.printf("Código: %s\n", get_codigo());
+		//System.out.printf("Faixa: %s\n", get_faixa());
+		//System.out.printf("Horário: %s\n", get_horario());
+		//System.out.printf("Armas: %s\n", get_arma() ? "sim" : "não");
+		//System.out.println();
 	}
 
 	public String toString(){

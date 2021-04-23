@@ -93,7 +93,24 @@ public class aluno extends Info{
 		this.faixa = faixa;
 	}
 
-	public int get_faixa(){
+	public String get_faixa(){
+        switch(get_faixaN()){
+			case 0:	return "Amarela";
+			case 1:	return "Dourada";
+			case 2:	return "Laranja";
+			case 3:	return "Jade";
+			case 4:	return "Verde";
+			case 5:	return "Roxa";
+			case 6:	return "Azul";
+			case 7:	return "Vermelha";
+			case 8:	return "Marrom Clara";
+			case 9:	return "Marrom";
+			case 10: return "Preta";
+			default: return "";
+		}
+    }
+
+	public int get_faixaN(){
 		return this.faixa;
 	}
 
@@ -120,11 +137,15 @@ public class aluno extends Info{
 		aulas_matriculadas.remove(a);
 	}
 
-	public void exibe_aulas(){
+	public String exibe_aulas(){
+		String exib = "";
 		for(aula d : aulas_matriculadas){
-			d.exibe();
-			System.out.println();
+			exib.concat(d.exibe());
+			//d.exbie();
+			//System.out.println();
+			exib.concat("\n");
 		}
+		return exib;
 	}
 
 	public void att_aula(aula a){
@@ -160,28 +181,33 @@ public class aluno extends Info{
 
 	// Método que exibe as informações de um cliente
 	@Override
-	public void exibe(){
-		System.out.println();
-		System.out.printf("Nome: %s\n", get_nome());
-		System.out.printf("CPF: %s\n", get_CPF());
-		System.out.printf("Data de nascimento: " + get_nascimento()+"\n");
-		System.out.printf("Email: %s\n", get_email());
-		System.out.printf("Telefone: %s\n", get_telefone());
-		System.out.printf("Número codigo: %s\n", get_codigo());
-		System.out.printf("Faixa: %s\n", get_faixa());
-		System.out.printf("Auxiliar: %s\n", get_auxiliar() ? "sim" : "não");
-		System.out.printf("Quantidade de aulas na semana: %d\n", get_aulas());
-		System.out.printf("Valor semanal de aulas: %.2f\n", get_valor());
-		System.out.printf("Situação: ");
-		if(get_mes_pago()){
-			System.out.println("Em dia");
-		}
-		else{
-			System.out.printf("Atrasado %d meses\n", get_atraso_conta());
-		}
-		System.out.println();
-		exibe_aulas();
-		System.out.println();
+	public String exibe(){
+		String tudo = "\nNome: " + get_nome() + "\nCPF: " + get_CPF() + "\nData de Nascimento: " + get_nascimento() + "\nEmail: " + get_email() + "\nTelefone: " + get_telefone() + "\nNúmero codigo: " + get_codigo() + "\nFaixa: " + get_faixa() + "\nAuxiliar: " + (get_auxiliar() ? "sim" : "não") + "\nQuantidade de aulas na semana: " + get_aulas() + "\nValor semanal de aulas: " + String.format("%.2f",get_valor()) + "\nSituação: " + (get_mes_pago() ? "Em dia" : ("Atrasado " + get_atraso_conta() + " meses\n"));
+
+
+
+		//System.out.println();
+		//System.out.printf("Nome: %s\n", get_nome());
+		//System.out.printf("CPF: %s\n", get_CPF());
+		//System.out.printf("Data de nascimento: " + get_nascimento() + "\n");
+		//System.out.printf("Email: %s\n", get_email());
+		//System.out.printf("Telefone: %s\n", get_telefone());
+		//System.out.printf("Número codigo: %s\n", get_codigo());
+		//System.out.printf("Faixa: %s\n", get_faixa());
+		//System.out.printf("Auxiliar: %s\n", get_auxiliar() ? "sim" : "não");
+		//System.out.printf("Quantidade de aulas na semana: %d\n", get_aulas());
+		//System.out.printf("Valor semanal de aulas: %.2f\n", get_valor());
+		//System.out.printf("Situação: ");
+		//if(get_mes_pago()){
+		//	System.out.println("Em dia");
+		//}
+		//else{
+		//	System.out.printf("Atrasado %d meses\n", get_atraso_conta());
+		//}
+		//System.out.println();
+		tudo.concat(exibe_aulas());
+		//System.out.println();
+		return tudo;
 	}
 
 	// Método que retorna nome e código de um cliente para escolha de consulta

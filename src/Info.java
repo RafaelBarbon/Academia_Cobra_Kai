@@ -46,5 +46,5 @@ abstract class Info {
 
     abstract void set_senha(String senhaAntiga, String senhaNova, String senhaMestre);
 
-	abstract void exibe();
+	abstract String exibe();
 }
