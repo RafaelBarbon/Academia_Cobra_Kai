@@ -128,7 +128,8 @@ public class menu{
 							contador_codigo_aluno++;
 							aluno_auxiliar = new aluno(nome,CPF,email,telefone,"A"+Integer.toString(contador_codigo_aluno),data,senha);
 							alunos.add(aluno_auxiliar);
-							System.out.printf("Aluno cadastrado com sucesso. Código: %s. Pressione ENTER para continuar.",aluno_auxiliar.get_codigo()); // olhar
+							JOptionPane.showMessageDialog(null, "Aluno cadastrado com sucesso! Código: "+aluno_auxiliar.get_codigo(), empresa, JOptionPane.INFORMATION_MESSAGE);
+							//System.out.printf("Aluno cadastrado com sucesso. Código: %s. Pressione ENTER para continuar.",aluno_auxiliar.get_codigo()); // olhar
 							break;
 // ****************************************************************************************************
 						case 2: // Professor
@@ -147,7 +148,8 @@ public class menu{
 							contador_codigo_professor++;
 							professor_auxiliar = new professor(nome,CPF,email,telefone,"P"+Integer.toString(contador_codigo_professor),data,senha);
 							professores.add(professor_auxiliar);
-							System.out.printf("Professor cadastrado com sucesso. Código: %s . Pressione ENTER para continuar.",professor_auxiliar.get_codigo()); // olhar
+							JOptionPane.showMessageDialog(null, "Professor cadastrado com sucesso!", empresa, JOptionPane.INFORMATION_MESSAGE);
+							//System.out.printf("Professor cadastrado com sucesso. Código: %s . Pressione ENTER para continuar.",professor_auxiliar.get_codigo()); // olhar
 							break;
 // ****************************************************************************************************
 						case 3: // Aulas
@@ -158,8 +160,9 @@ public class menu{
 							contador_codigo_aula++;
 							aula_auxiliar = new aula(faixa, armas, horario, "C"+Integer.toString(contador_codigo_aula));
 							aulas.add(aula_auxiliar);
-							System.out.printf("Aula cadastrada com sucesso. Código: %s. Pressione ENTER para continuar.",aula_auxiliar.get_codigo()); // olhar
-							input.nextLine();
+							JOptionPane.showMessageDialog(null, "Aula cadastrado com sucesso!"+aula_auxiliar.get_codigo(), empresa, JOptionPane.INFORMATION_MESSAGE);
+							//System.out.printf("Aula cadastrada com sucesso. Código: %s. Pressione ENTER para continuar.",aula_auxiliar.get_codigo()); // olhar
+							//input.nextLine();
 							break;
 					}
 					input.nextLine();
@@ -279,7 +282,7 @@ public class menu{
 										a.set_valor(valor_aulas(a.get_aulas()));
 									}
 									aulas.remove(au);
-									System.out.println("Aula removida com sucesso.");
+									//System.out.println("Aula removida com sucesso.");
 									JOptionPane.showMessageDialog(null, "Aula removida com sucesso.", empresa, JOptionPane.INFORMATION_MESSAGE);
 									encontrou = true;
 									break;
@@ -380,8 +383,9 @@ public class menu{
 										}
 										catch(InputMismatchException InputMismatchException){ // olhar
 											error = true;
-											System.out.println("Insira um número inteiro dentro do intervalo para prosseguir. Pressione qualquer tecla para continuar.");
-											input.nextLine();
+											JOptionPane.showMessageDialog(null, "Insira um número inteiro dentro do intervalo para prosseguir.", empresa, JOptionPane.ERROR_MESSAGE);
+											//System.out.println("Insira um número inteiro dentro do intervalo para prosseguir. Pressione qualquer tecla para continuar.");
+											//input.nextLine();
 										}
 									}while(error || sub_inter_menuoption > 2 || sub_inter_menuoption < 1);
 								}while(sub_inter_menuoption == 1);
@@ -434,8 +438,9 @@ public class menu{
 										}
 										catch(InputMismatchException InputMismatchException){ // olhar
 											error = true;
-											System.out.println("Insira um número inteiro dentro do intervalo para prosseguir. Pressione qualquer tecla para continuar.");
-											input.nextLine();
+											JOptionPane.showMessageDialog(null, "Insira um número inteiro dentro do intervalo para prosseguir.", empresa, JOptionPane.ERROR_MESSAGE);
+											//System.out.println("Insira um número inteiro dentro do intervalo para prosseguir. Pressione qualquer tecla para continuar.");
+											//input.nextLine();
 										}
 									}while(error || sub_inter_menuoption > 2 || sub_inter_menuoption < 1);
 								}while(sub_inter_menuoption == 1);
