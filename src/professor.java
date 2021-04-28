@@ -7,6 +7,7 @@ import java.io.*;
 import javax.mail.*;
 import javax.mail.internet.*;
 import javax.activation.*;
+import javax.swing.*;
 
 public class professor extends Info{
 	LinkedList <String> horario = new LinkedList <String>(); // Data e hora de entrada e saída
@@ -74,7 +75,8 @@ public class professor extends Info{
 			comprovante.close();
 		}
 		catch(IOException e){
-			System.out.println("Erro ao criar o arquivo");
+			//System.out.println("Erro ao criar o arquivo");
+			JOptionPane.showMessageDialog(null, "Insira um número inteiro dentro do intervalo para prosseguir.", "Academia Cobra Kai" ,JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
