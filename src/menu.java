@@ -1216,7 +1216,7 @@ public class menu extends JFrame implements ActionListener{
 		try{
 			final String os = System.getProperty("os.name");
 			if(os.contains("Windows")){ // Caso o sistema operacional da máquina seja Windows
-				Runtime.getRuntime().exec("cls");
+				new ProcessBuilder("cmd","/c","cls").inheritIO().start().waitFor();
 			}
 			else{ // Caso o sistema operacional da máquina seja Linux ou MAC
 				System.out.print("\33\143"); // 33 - limpa a tela ; 143 volta o cursor de texto para o início
