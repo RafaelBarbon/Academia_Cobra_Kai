@@ -25,7 +25,8 @@ create table if not exists alunos{
 	faixa int,
 	auxiliar boolean,
 	senha varchar(20),
-	primary key (codigo)
+	primary key (codigo),
+	primary key (cpf)
 }default charset = utf8;
 
 create table if not exists professores{
@@ -36,7 +37,8 @@ create table if not exists professores{
 	telefone varchar(16),
 	senha varchar(20),
 	nascimento date /*yyyy-mm-dd*/
-	primary key (codigo)
+	primary key (codigo),
+	primary key (cpf)
 }default charset = utf8;
 
 create table if not exists matriculas{
@@ -51,7 +53,23 @@ create table if not exists matriculas{
 create table if not exists acessos{
 	id varchar(5),
 	id-professor varchar(5),
-	horario datetime,
+	horario datetime, /*yyyy-MM-dd hh-mm-ss*/
 	primary key (id),
 	foreign key (id-professor) references professores(codigo)
+}default charset = utf8;
+
+create table if not exists banco{
+	cpf varchar(15),
+	pago boolean,
+	primary key (cpf)
+}default charset = utf8;
+
+create table if not exists info{
+	v1aula decimal(4,2),
+	v2aula decimal(4,2),
+	v3aula decimal(4,2),
+	v4aula decimal(4,2),
+	senha-mestre varchar(20),
+	senha-email varchar(20),
+	email varchar(20)
 }default charset = utf8;
