@@ -19,26 +19,9 @@
 * [Descrição do problema](#Descrição-do-problema)
 * [Definição dos requesitos](#Definição-dos-requisitos)
 * [Projeto de software](#Projeto-de-software)
-* [Apresentação do software](#Apresentação-do-software)
 * [Como executar](#Como-executar)
 * [Licença](#Licença)
 * [Autores](#Autores)
-
-<p align="center"> <img src="imgs/Diagrama_Caso_de_Uso.jpg"> </p>
-
-<p align="center"> <img src="imgs/Diagrama%20de%20Sequencia%20aluno.jpg"> </p>
-
-<p align="center"> <img src="imgs/Diagrama%20de%20Sequencia%20professor.jpg"> </p>
-
-<p align="center"> <img src="imgs/Hierarquia%20dos%20modulos.jpg"> </p>
-
-<p align="center"> <img src="imgs/Arquitetura%20do%20ambiente.jpg"> </p>
-
-<p align="center"> <img src="imgs/Diagrama%20de%20classes.jpg"> </p>
-
-<p align="center"> <img src="imgs/Diagrama%20entidade%20relacionamento.jpg"> </p>
-
-<p align="center"> <img src="imgs/Diagrama%20relacional.jpg"> </p>
 
 ## Descrição do projeto
 Sistema de gerenciamento de uma academia de artes marciais utilizando JAVA, SQL (Banco de Dados - MySQL) e Linguagem C (arduino). Maiores detalhes a respeito do [enunciado](PROJETO.pdf), [documentação](RAH%20-%20Desenvolvimento%20de%20Sistemas.pdf) e [apresentação do projeto](https://prezi.com/view/QVZTghRVZIM5FeBVW7Gn/) podem ser encontrados clicando nos links.
@@ -53,10 +36,37 @@ O modelo de gestão anterior da academia é de que o aluno deveria trazer consig
 <p align="center"> <img src="imgs/Diagrama%20causa%20e%20efeito.jpeg"> </p>
 
 ## Definição dos requesitos
+Com os problemas descritos e detalhados, o passo seguinte é a definição dos requesitos que o software deve satisfazer. Uma maneira de identificar os requisitos funcionais do programa é a partir do diagrama de caso de uso descrito abaixo:
 
+<p align="center"> <img src="imgs/Diagrama_Caso_de_Uso.jpg"> </p>
+
+Para um melhor detalhamento de alguns requisitos, o diagrama de sequência identifica os passos que o software deve realizar para concluir uma ação. Abaixo há o diagrama de entrada dos alunos:
+
+<p align="center"> <img src="imgs/Diagrama%20de%20Sequencia%20aluno.jpg"> </p>
+
+Bem como o de professores:
+
+<p align="center"> <img src="imgs/Diagrama%20de%20Sequencia%20professor.jpg"> </p>
+
+Os requisitos não funcionais podem ser encontrados no [relatório do projeto](RAH%20-%20Desenvolvimento%20de%20Sistemas.pdf).
 ## Projeto de software
+Com os requisitos definidos, o próximo passo é projetar o software. O diagrama de hierarquia dos módulos define cada módulo do software com as interações por parte de dados e tela. O mesmo é descrito abaixo:
 
-## Apresentação do software
+<p align="center"> <img src="imgs/Hierarquia%20dos%20modulos.jpg"> </p>
+
+Após definida a hierarquia dos módulos, a arquitetura do ambiente deve ser definida como descrita no diagrama abaixo:
+
+<p align="center"> <img src="imgs/Arquitetura%20do%20ambiente.jpg"> </p>
+
+Para projetar o software é necessário definir as classes e atributos dos objetos com o diagrama de classes descrito a seguir:
+
+<p align="center"> <img src="imgs/Diagrama%20de%20classes.jpg"> </p>
+
+Para que haja o armazenamento não volátil dos objetos gerados pelo software, houve a necessidade de implementação de um banco de dados local, bem como descrito pela arquitetura do ambiente. Por isso, os diagramas de entidade e relacionamento (DER) e diagrama relacional (DR) descrevem a estrutura do banco de dados utilizado pelo software. A seguir, há como anteriormente descrito, respectivamente, os diagramas:
+
+<p align="center"> <img src="imgs/Diagrama%20entidade%20relacionamento.jpg"> </p>
+
+<p align="center"> <img src="imgs/Diagrama%20relacional.jpg"> </p>
 
 ## Como executar
 
@@ -73,7 +83,7 @@ Todos os arquivos .java, .jar e .jpg devem estar no mesmo diretório que o arqui
 Ao iniciar o programa solicita a senha do banco de dados (definido como padrão o endereço localhost (127.0.0.1)), caso a senha esteja incorreta, o programa não sincronizará mudanças nem carregará informações do banco de dados para manipulação.
 
 ## Licença
-Este projeto está licenciado com a [licença MIT](LICENSE)
+Este projeto está licenciado com a [licença MIT](LICENSE).
 
 ## Autores
 - [Alcides Beato](https://github.com/alcidesbeato)
